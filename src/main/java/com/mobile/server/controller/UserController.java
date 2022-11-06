@@ -5,14 +5,11 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mobile.server.api.MovieApiProperties;
 import com.mobile.server.controller.pojo.RoleToUserForm;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.service.UserService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MimeTypeUtils;
@@ -32,26 +29,16 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class UserResource {
+public class UserController {
     private final UserService userService;
-
-    @Autowired
-    private MovieApiProperties api;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>>getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @PostMapping("/user/save")
-    public ResponseEntity<User>saveUser(@RequestBody User user) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
-    }
-
     @PostMapping("/register")
     public ResponseEntity<User>registerUser(@RequestBody User user) {
-        System.out.println(api.getUrl());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/register").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
