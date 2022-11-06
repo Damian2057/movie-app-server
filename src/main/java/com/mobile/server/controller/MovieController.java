@@ -15,35 +15,30 @@ public class MovieController {
 
     @PutMapping("/addGenre")
     public ResponseEntity<?> addGenre(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
         //TODO:?
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/addGenreList")
     public ResponseEntity<?> addGenreList(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
         //TODO:?
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/removeGenre")
     public ResponseEntity<?> removeGenre(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
         //TODO:?
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/addMovie")
     public ResponseEntity<?> addMovie(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
         //TODO:?
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/addMovieList")
     public ResponseEntity<?> addMovieList(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
         //TODO:?
         return ResponseEntity.ok().build();
     }
@@ -55,7 +50,6 @@ public class MovieController {
 
     @PutMapping("/removeMovie")
     public ResponseEntity<?> removeMovie(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
         //TODO:?
         return ResponseEntity.ok().build();
     }
