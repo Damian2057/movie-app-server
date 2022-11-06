@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Document
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     private String id;
