@@ -1,5 +1,6 @@
 package com.mobile.server.service;
 
+import com.mobile.server.exception.ApiExceptions;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.repository.RoleRepository;
@@ -44,9 +45,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User saveUser(User user) {
-        log.info("Saving new user {} to the database", user.getUsername());
+    public User registerUser(User user) {
+        if(userRepository.findByUsername(user.getUsername()) != null) {
+            throw new ApiExceptions.LogicException("The username is not unique");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(user.getRoles().isEmpty()) {
+            user.setRoles(List.of(roleRepository.findByName("ROLE_USER")));
+        }
+        log.info("Saving new user {} to the database", user.getUsername());
         return userRepository.save(user);
     }
 

@@ -7,7 +7,7 @@ public class ApiExceptions {
         }
     }
 
-    public class LogicException extends RuntimeException {
+    public static class LogicException extends RuntimeException {
         public LogicException(String message) {
             super(message);
         }

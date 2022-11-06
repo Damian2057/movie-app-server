@@ -5,11 +5,14 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mobile.server.controller.dto.UserDto;
+import com.mobile.server.controller.mapper.Mapper;
 import com.mobile.server.controller.pojo.RoleToUserForm;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MimeTypeUtils;
@@ -30,29 +33,17 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>>getUsers() {
-        return ResponseEntity.ok().body(userService.getUsers());
+    public ResponseEntity<List<UserDto>> getUsers() {
+        return new ResponseEntity<>(Mapper.mapUsers(userService.getUsers()), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User>registerUser(@RequestBody User user) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/register").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
-    }
-
-    @PostMapping("/role/save")
-    public ResponseEntity<Role>saveRole(@RequestBody Role role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
-    }
-
-    @PostMapping("/role/addtouser")
-    public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDto> registerUser(@RequestBody User user) {
+        return new ResponseEntity<>(Mapper.mapUser(userService.registerUser(user)), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/token/refresh")
@@ -80,7 +71,6 @@ public class UserController {
             }catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(FORBIDDEN.value());
-                //response.sendError(FORBIDDEN.value());
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", exception.getMessage());
                 response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
@@ -90,4 +80,5 @@ public class UserController {
             throw new RuntimeException("Refresh token is missing");
         }
     }
+
 }
