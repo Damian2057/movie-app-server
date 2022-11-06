@@ -1,15 +1,10 @@
-package io.getarrays.userservice.service;
+package com.mobile.server.service;
 
-import io.getarrays.userservice.domain.Role;
-import io.getarrays.userservice.domain.User;
+import com.mobile.server.model.Role;
+import com.mobile.server.model.User;
 
 import java.util.List;
 
-/**
- * @author Get Arrays (https://www.getarrays.io/)
- * @version 1.0
- * @since 7/10/2021
- */
 public interface UserService {
     User saveUser(User user);
     Role saveRole(Role role);

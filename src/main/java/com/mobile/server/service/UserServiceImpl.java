@@ -1,9 +1,9 @@
-package io.getarrays.userservice.service;
+package com.mobile.server.service;
 
-import io.getarrays.userservice.domain.Role;
-import io.getarrays.userservice.domain.User;
-import io.getarrays.userservice.repo.RoleRepository;
-import io.getarrays.userservice.repo.UserRepository;
+import com.mobile.server.model.Role;
+import com.mobile.server.model.User;
+import com.mobile.server.repository.RoleRepository;
+import com.mobile.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,11 +18,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * @author Get Arrays (https://www.getarrays.io/)
- * @version 1.0
- * @since 7/10/2021
- */
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;

@@ -6,15 +6,15 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.5.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
-	<groupId>io.getarrays</groupId>
-	<artifactId>userservice</artifactId>
+	<groupId>com.mobile.server</groupId>
+	<artifactId>mobile-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>userservice</name>
-	<description>Security Service Application Demo</description>
+	<name>mobile-server</name>
+	<description>Movie Service Application</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -1,13 +1,8 @@
-package io.getarrays.userservice.repo;
+package com.mobile.server.repository;
 
-import io.getarrays.userservice.domain.User;
+import com.mobile.server.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-/**
- * @author Get Arrays (https://www.getarrays.io/)
- * @version 1.0
- * @since 7/10/2021
- */
 public interface UserRepository extends MongoRepository<User, String> {
     User findByUsername(String username);
 }
