@@ -37,9 +37,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else {
             log.info("User found in the database: {}", username);
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            user.getRoles().forEach(role -> {
-                authorities.add(new SimpleGrantedAuthority(role.getName()));
-            });
+            user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
         }
     }
