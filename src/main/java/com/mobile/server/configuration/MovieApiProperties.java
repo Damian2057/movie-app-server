@@ -1,4 +1,4 @@
-package com.mobile.server.api;
+package com.mobile.server.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class MovieApiProperties {
     private String url;
     private String key;
+    private String img;
 }

@@ -2,7 +2,6 @@ package com.mobile.server.model;
 
 import com.mobile.server.exception.ApiExceptions;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -11,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Document
 @Data
@@ -22,12 +20,12 @@ public class User {
     private String id;
     @Indexed(unique = true)
     private String username;
-    @Indexed(unique = true)
     private String emailAddress;
     private String password;
     private Collection<Role> roles = new ArrayList<>();
-    private Collection<Genre> genres = new ArrayList<>();
-    private Collection<Movie> memorizedMovies = new ArrayList<>();
+    private Collection<Genre> favoriteGenres = new ArrayList<>();
+    private Collection<Movie> favoriteMovies = new ArrayList<>();
+    private Collection<Movie> reminderMovies = new ArrayList<>();
 
     private User(User user) {
         this.id = user.id;
@@ -35,8 +33,9 @@ public class User {
         this.emailAddress = user.emailAddress;
         this.password = user.password;
         this.roles = user.roles;
-        this.genres = user.genres;
-        this.memorizedMovies = user.memorizedMovies;
+        this.favoriteGenres = user.favoriteGenres;
+        this.favoriteMovies = user.favoriteMovies;
+        this.reminderMovies = user.reminderMovies;
     }
 
     public static final class UserBuilder {
@@ -72,12 +71,17 @@ public class User {
         }
 
         public UserBuilder setGenres(Collection<Genre> genres) {
-            user.genres = genres;
+            user.favoriteGenres = genres;
             return this;
         }
 
-        public UserBuilder setMemorizedMovies(Collection<Movie> movies) {
-            user.memorizedMovies = movies;
+        public UserBuilder setFavouriteMovies(Collection<Movie> movies) {
+            user.favoriteMovies = movies;
+            return this;
+        }
+
+        public UserBuilder setReminderMovies(Collection<Movie> movies) {
+            user.reminderMovies = movies;
             return this;
         }
 

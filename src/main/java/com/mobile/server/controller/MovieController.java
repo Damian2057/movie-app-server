@@ -1,8 +1,10 @@
 package com.mobile.server.controller;
 
 import com.mobile.server.controller.pojo.RoleToUserForm;
+import com.mobile.server.service.MovieService;
 import com.mobile.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +13,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MovieController {
 
-    private final UserService userService;
+    @Autowired
+    private MovieService movieService;
+    @Autowired
+    private UserService userService;
 
     @PutMapping("/addGenre")
     public ResponseEntity<?> addGenre(@RequestBody RoleToUserForm form) {
-        //TODO:?
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getGenre")
+    public ResponseEntity<?> getGenre() {
         return ResponseEntity.ok().build();
     }
 
@@ -43,8 +52,9 @@ public class MovieController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/ping")
+    @GetMapping("/getMovie")
     public ResponseEntity<?> ping() {
+        movieService.getMovie("xd");
         return ResponseEntity.ok().build();
     }
 

@@ -17,5 +17,6 @@ public class UserDto {
     private String id;
     private String username;
     private Collection<Genre> genres;
-    private Collection<Movie> movies;
+    private Collection<Movie> favoriteMovies;
+    private Collection<Movie> reminderMovies;
 }

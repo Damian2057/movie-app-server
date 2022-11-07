@@ -12,12 +12,18 @@ public class Mapper {
         return users.stream().map(user ->
                 new UserDto(user.getId(),
                         user.getUsername(),
-                        user.getGenres(),
-                        user.getMemorizedMovies()))
+                        user.getFavoriteGenres(),
+                        user.getFavoriteMovies(),
+                        user.getReminderMovies()))
                 .collect(Collectors.toList());
     }
 
     public static UserDto mapUser(User user) {
-        return new UserDto(user.getId(), user.getUsername(), user.getGenres(), user.getMemorizedMovies());
+        return new UserDto(user.getId(),
+                user.getUsername(),
+                user.getFavoriteGenres(),
+                user.getFavoriteMovies(),
+                user.getReminderMovies());
     }
+
 }
