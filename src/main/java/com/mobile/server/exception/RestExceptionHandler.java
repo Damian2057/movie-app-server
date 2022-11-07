@@ -1,5 +1,6 @@
 package com.mobile.server.exception;
 
+import com.mobile.server.exception.types.ApiExceptions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

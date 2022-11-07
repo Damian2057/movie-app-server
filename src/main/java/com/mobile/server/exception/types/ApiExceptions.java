@@ -1,4 +1,4 @@
-package com.mobile.server.exception;
+package com.mobile.server.exception.types;
 
 public class ApiExceptions {
     public static class InvalidBusinessArgumentException extends RuntimeException{

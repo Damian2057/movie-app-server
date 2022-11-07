@@ -1,6 +1,6 @@
 package com.mobile.server.service;
 
-import com.mobile.server.exception.ApiExceptions;
+import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.repository.RoleRepository;

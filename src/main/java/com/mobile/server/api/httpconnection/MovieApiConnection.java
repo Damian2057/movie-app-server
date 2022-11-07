@@ -1,6 +1,6 @@
 package com.mobile.server.api.httpconnection;
 
-import com.mobile.server.exception.ApiExceptions;
+import com.mobile.server.exception.types.ApiExceptions;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;

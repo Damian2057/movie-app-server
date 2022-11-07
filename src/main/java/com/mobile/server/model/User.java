@@ -1,6 +1,6 @@
 package com.mobile.server.model;
 
-import com.mobile.server.exception.ApiExceptions;
+import com.mobile.server.exception.types.ApiExceptions;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
