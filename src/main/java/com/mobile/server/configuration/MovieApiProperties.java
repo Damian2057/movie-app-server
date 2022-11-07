@@ -1,4 +1,4 @@
-package com.mobile.server.api;
+package com.mobile.server.configuration;
 
 import lombok.Getter;
 import lombok.Setter;

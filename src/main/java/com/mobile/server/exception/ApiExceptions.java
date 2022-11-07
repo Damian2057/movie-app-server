@@ -1,7 +1,7 @@
 package com.mobile.server.exception;
 
 public class ApiExceptions {
-    public class InvalidBusinessArgumentException extends RuntimeException{
+    public static class InvalidBusinessArgumentException extends RuntimeException{
         public InvalidBusinessArgumentException(String message) {
             super(message);
         }
@@ -15,6 +15,12 @@ public class ApiExceptions {
 
     public static class ParameterException extends RuntimeException{
         public ParameterException(String message) {
+            super(message);
+        }
+    }
+
+    public static class ConnectionException extends RuntimeException{
+        public ConnectionException(String message) {
             super(message);
         }
     }
