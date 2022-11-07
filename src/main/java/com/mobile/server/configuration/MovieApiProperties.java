@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class MovieApiProperties {
     private String url;
     private String key;
+    private String img;
 }
