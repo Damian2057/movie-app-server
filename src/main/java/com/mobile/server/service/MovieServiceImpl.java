@@ -48,16 +48,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Genre getGenre(int id) {
-        return getSingleGenre(id);
-    }
-
-    @Override
-    public Genre getGenre(String name) {
-        return getSingleGenre(name);
-    }
-
-    @Override
     public List<Genre> getGenres() {
         return getGenreList();
     }

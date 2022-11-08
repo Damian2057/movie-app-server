@@ -1,7 +1,13 @@
 package com.mobile.server.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mobile.server.controller.pojo.RoleToUserForm;
+import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
+import com.mobile.server.model.User;
 import com.mobile.server.service.MovieService;
 import com.mobile.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -24,16 +34,8 @@ public class MovieController {
     private UserService userService;
 
     @PutMapping("/addGenre")
-    public ResponseEntity<?> addGenre(@RequestBody RoleToUserForm form) {
+    public ResponseEntity<?> addGenre() {
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/getGenre")
-    public ResponseEntity<?> getGenre(@RequestBody Genre genre) {
-        Genre finalGenre = genre.getId() == null ?
-                movieService.getGenre(genre.getName()) :
-                movieService.getGenre(genre.getId());
-        return new ResponseEntity<>(finalGenre, HttpStatus.OK);
     }
 
     @GetMapping("/getGenreList")
@@ -41,26 +43,31 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getGenres(), HttpStatus.OK);
     }
 
+    @GetMapping("/getUserGenreList")
+    public ResponseEntity<Collection<Genre>> getUserGenreList(HttpServletRequest request) throws IOException {
+        return new ResponseEntity<>(getUserFromHeader(request).getFavoriteGenres(), HttpStatus.OK);
+    }
+
     @PutMapping("/addGenreList")
-    public ResponseEntity<?> addGenreList(@RequestBody RoleToUserForm form) {
+    public ResponseEntity<?> addGenreList() {
         //TODO:?
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/removeGenre")
-    public ResponseEntity<?> removeGenre(@RequestBody RoleToUserForm form) {
+    public ResponseEntity<?> removeGenre() {
         //TODO:?
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/addMovie")
-    public ResponseEntity<?> addMovie(@RequestBody RoleToUserForm form) {
+    public ResponseEntity<?> addMovie() {
         //TODO:?
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/addMovieList")
-    public ResponseEntity<?> addMovieList(@RequestBody RoleToUserForm form) {
+    public ResponseEntity<?> addMovieList() {
         //TODO:?
         return ResponseEntity.ok().build();
     }
@@ -71,8 +78,23 @@ public class MovieController {
     }
 
     @PutMapping("/removeMovie")
-    public ResponseEntity<?> removeMovie(@RequestBody RoleToUserForm form) {
+    public ResponseEntity<?> removeMovie() {
         //TODO:?
         return ResponseEntity.ok().build();
     }
+
+    private User getUserFromHeader(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String refresh_token = authorizationHeader.substring("Bearer ".length());
+            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(refresh_token);
+            String username = decodedJWT.getSubject();
+            return userService.getUser(username);
+        } else {
+            throw new ApiExceptions.InvalidBusinessArgumentException("request submitted without authorization");
+        }
+    }
+
 }
