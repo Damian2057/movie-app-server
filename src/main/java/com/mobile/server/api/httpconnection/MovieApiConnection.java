@@ -25,6 +25,11 @@ public class MovieApiConnection implements Closeable {
         appendParam = "?api_key=" + key;
     }
 
+    public MovieApiConnection(String url) {
+        this.url = url.replace("\"", "");
+        appendParam = "?";
+    }
+
     public void setRequestMethod(String method) {
         this.method = method;
     }
