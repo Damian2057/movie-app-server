@@ -29,8 +29,11 @@ public class MovieController {
     }
 
     @GetMapping("/getGenre")
-    public ResponseEntity<?> getGenre() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> getGenre(@RequestBody Genre genre) {
+        Genre finalGenre = genre.getId() == null ?
+                movieService.getGenre(genre.getName()) :
+                movieService.getGenre(genre.getId());
+        return new ResponseEntity<>(finalGenre, HttpStatus.OK);
     }
 
     @GetMapping("/getGenreList")

@@ -1,14 +1,6 @@
 package com.mobile.server.service;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.mobile.server.api.factory.ConnectionFactory;
 import com.mobile.server.api.httpconnection.MovieApiConnection;
 import com.mobile.server.configuration.MovieApiProperties;
@@ -23,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,27 +25,21 @@ public class MovieServiceImpl implements MovieService {
 
     @Autowired
     private MovieApiProperties apiProperties;
-    private ConnectionFactory factory = new ConnectionFactory();
+    private final ConnectionFactory factory = new ConnectionFactory();
 
     @Override
     public Movie getMovie(String title) {
-//        try {
-//            MovieApiConnection movieApiConnection = new MovieApiConnection(apiProperties.getUrl(), apiProperties.getKey());
-//            String xdd = xd.response();
-//            System.out.println(xdd);
-//        } catch (Exception e) {
-//            System.out.println("BLAD");
-//        }
         return null;
     }
 
     @Override
     public List<Movie> getAllMovies() {
-        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
-            return null;
-        } catch (Exception e) {
-            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
-        }
+//        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
+//            return null;
+//        } catch (Exception e) {
+//            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+//        }
+        return null;
     }
 
     @Override
@@ -65,16 +49,36 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Genre getGenre(int id) {
-        return null;
+        return getSingleGenre(id);
     }
 
     @Override
     public Genre getGenre(String name) {
-        return null;
+        return getSingleGenre(name);
     }
 
     @Override
     public List<Genre> getGenres() {
+        return getGenreList();
+    }
+
+    private Genre getSingleGenre(String name) {
+        return getGenreList().stream()
+                .filter(genre -> genre.getName().equalsIgnoreCase(name))
+                .findAny()
+                .orElseThrow(() ->
+                        new ApiExceptions.ParameterException("the genre is not available"));
+    }
+
+    private Genre getSingleGenre(int id) {
+        return getGenreList().stream()
+                .filter(genre -> genre.getId().equals(id))
+                .findAny()
+                .orElseThrow(() ->
+                        new ApiExceptions.ParameterException("the genre is not available"));
+    }
+
+    private List<Genre> getGenreList() {
         try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
             apiConnection.setRequestMethod("GET");
             apiConnection.appendEndPoint("/genre/movie/list");
@@ -88,4 +92,5 @@ public class MovieServiceImpl implements MovieService {
             throw new ApiExceptions.ConnectionException("Error connecting to movie api");
         }
     }
+
 }
