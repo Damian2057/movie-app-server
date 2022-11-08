@@ -1,6 +1,6 @@
 package com.mobile.server.api.httpconnection;
 
-import com.mobile.server.exception.ApiExceptions;
+import com.mobile.server.exception.types.ApiExceptions;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -23,6 +23,11 @@ public class MovieApiConnection implements Closeable {
         this.url = url.replace("\"", "");
         key = key.replace("\"", "");
         appendParam = "?api_key=" + key;
+    }
+
+    public MovieApiConnection(String url) {
+        this.url = url.replace("\"", "");
+        appendParam = "?";
     }
 
     public void setRequestMethod(String method) {
