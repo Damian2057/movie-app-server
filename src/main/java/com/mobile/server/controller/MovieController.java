@@ -67,7 +67,6 @@ public class MovieController {
 
     @GetMapping("/getMovie")
     public ResponseEntity<?> ping() {
-        movieService.getMovie("xd");
         return ResponseEntity.ok().build();
     }
 
