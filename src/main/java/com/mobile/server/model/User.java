@@ -8,8 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Document
 @Data
@@ -22,10 +22,10 @@ public class User {
     private String username;
     private String emailAddress;
     private String password;
-    private Collection<Role> roles = new ArrayList<>();
-    private Collection<Genre> favoriteGenres = new ArrayList<>();
-    private Collection<Movie> favoriteMovies = new ArrayList<>();
-    private Collection<Movie> reminderMovies = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
+    private Set<Genre> favoriteGenres = new HashSet<>();
+    private Set<Movie> favoriteMovies = new HashSet<>();
+    private Set<Movie> reminderMovies = new HashSet<>();
 
     private User(User user) {
         this.id = user.id;
@@ -36,6 +36,30 @@ public class User {
         this.favoriteGenres = user.favoriteGenres;
         this.favoriteMovies = user.favoriteMovies;
         this.reminderMovies = user.reminderMovies;
+    }
+
+    public void addGenre(Genre genre) {
+        favoriteGenres.add(genre);
+    }
+
+    public void removeGenre(Genre genre) {
+        favoriteGenres.remove(genre);
+    }
+
+    public void addMovie(Movie movie) {
+        favoriteMovies.add(movie);
+    }
+
+    public void removeMovie(Movie movie) {
+        favoriteMovies.remove(movie);
+    }
+
+    public void addRemMovie(Movie movie) {
+        reminderMovies.add(movie);
+    }
+
+    public void removeRemMovie(Movie movie) {
+        reminderMovies.remove(movie);
     }
 
     public static final class UserBuilder {
@@ -65,22 +89,22 @@ public class User {
             return this;
         }
 
-        public UserBuilder setRoles(Collection<Role> roles) {
+        public UserBuilder setRoles(Set<Role> roles) {
             user.roles = roles;
             return this;
         }
 
-        public UserBuilder setGenres(Collection<Genre> genres) {
+        public UserBuilder setGenres(Set<Genre> genres) {
             user.favoriteGenres = genres;
             return this;
         }
 
-        public UserBuilder setFavouriteMovies(Collection<Movie> movies) {
+        public UserBuilder setFavouriteMovies(Set<Movie> movies) {
             user.favoriteMovies = movies;
             return this;
         }
 
-        public UserBuilder setReminderMovies(Collection<Movie> movies) {
+        public UserBuilder setReminderMovies(Set<Movie> movies) {
             user.reminderMovies = movies;
             return this;
         }

@@ -48,6 +48,16 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Genre getGenre(int id) {
+        return getSingleGenre(id);
+    }
+
+    @Override
+    public Genre getGenre(String name) {
+        return getSingleGenre(name);
+    }
+
+    @Override
     public List<Genre> getGenres() {
         return getGenreList();
     }
@@ -57,7 +67,7 @@ public class MovieServiceImpl implements MovieService {
                 .filter(genre -> genre.getName().equalsIgnoreCase(name))
                 .findAny()
                 .orElseThrow(() ->
-                        new ApiExceptions.ParameterException("the genre is not available"));
+                        new ApiExceptions.ParameterException(name + " the genre is not available"));
     }
 
     private Genre getSingleGenre(int id) {

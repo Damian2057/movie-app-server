@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.mobile.server.controller.pojo.GenreForm;
 import com.mobile.server.controller.pojo.RoleToUserForm;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -33,29 +35,50 @@ public class MovieController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/addGenre")
-    public ResponseEntity<?> addGenre() {
-        return ResponseEntity.ok().build();
-    }
-
+    /**
+     * @return All available Genres in the system
+     */
     @GetMapping("/getGenreList")
     public ResponseEntity<List<Genre>> getGenreList() throws IOException {
         return new ResponseEntity<>(movieService.getGenres(), HttpStatus.OK);
     }
 
+    /**
+     * adds genre to a specific user
+     * @return affected user
+     */
+    @PutMapping("/addGenre")
+    public ResponseEntity<User> addGenre(HttpServletRequest request, @RequestBody GenreForm name) {
+        Optional<User> user = userService.addGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
+        return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * removes genre from specific user
+     * @return affected user
+     */
+    @PutMapping("/removeGenre")
+    public ResponseEntity<User> removeGenre(HttpServletRequest request, @RequestBody GenreForm name) {
+        Optional<User> user = userService.removeGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
+        return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Returns a list of the user's genres
+     * @param request header
+     * @return collection of genres
+     */
     @GetMapping("/getUserGenreList")
     public ResponseEntity<Collection<Genre>> getUserGenreList(HttpServletRequest request) throws IOException {
         return new ResponseEntity<>(getUserFromHeader(request).getFavoriteGenres(), HttpStatus.OK);
     }
 
+    /**
+     * adds genre list to a specific user
+     * @return affected user
+     */
     @PutMapping("/addGenreList")
     public ResponseEntity<?> addGenreList() {
-        //TODO:?
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/removeGenre")
-    public ResponseEntity<?> removeGenre() {
         //TODO:?
         return ResponseEntity.ok().build();
     }
