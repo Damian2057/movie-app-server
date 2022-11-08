@@ -1,6 +1,7 @@
 package com.mobile.server.service;
 
 import com.mobile.server.exception.types.ApiExceptions;
+import com.mobile.server.model.Genre;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.repository.RoleRepository;
@@ -15,9 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if(user.getRoles().isEmpty()) {
-            user.setRoles(List.of(roleRepository.findByName("ROLE_USER")));
+            user.setRoles(Set.of(roleRepository.findByName("ROLE_USER")));
         }
         log.info("Saving new user {} to the database", user.getUsername());
         return userRepository.save(user);
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Adding role {} to user {}", roleName, username);
         User user = userRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
-        user.setRoles(List.of(role));
+        user.setRoles(Set.of(role));
         userRepository.save(user);
     }
 
@@ -85,5 +84,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Collection<Role> getRoles() {
         return roleRepository.findAll();
+    }
+
+    @Override
+    public Optional<User> addGenreToUser(User user, Genre genre) {
+        log.info("Adding genre {} to user {}", genre.getName(), user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.addGenre(genre);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
+    @Override
+    public Optional<User> removeGenreToUser(User user, Genre genre) {
+        log.info("Removing genre {} to user {}", genre.getName(), user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.removeGenre(genre);
+            userRepository.save(user1);
+        });
+        return savedUser;
     }
 }

@@ -1,10 +1,12 @@
 package com.mobile.server.service;
 
+import com.mobile.server.model.Genre;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Service interface responsible for the operation related to the users
@@ -46,4 +48,8 @@ public interface UserService {
      * @return list of all users
      */
     Collection<Role> getRoles();
+
+    Optional<User> addGenreToUser(User user, Genre genre);
+
+    Optional<User> removeGenreToUser(User user, Genre genre);
 }

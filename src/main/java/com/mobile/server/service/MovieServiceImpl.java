@@ -67,7 +67,7 @@ public class MovieServiceImpl implements MovieService {
                 .filter(genre -> genre.getName().equalsIgnoreCase(name))
                 .findAny()
                 .orElseThrow(() ->
-                        new ApiExceptions.ParameterException("the genre is not available"));
+                        new ApiExceptions.ParameterException(name + " the genre is not available"));
     }
 
     private Genre getSingleGenre(int id) {
