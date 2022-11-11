@@ -10,27 +10,26 @@ import com.mobile.server.model.User;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Mapper {
 
-    public static List<UserDto> mapUsers(List<User> users) {
+    public static List<UserDto> mapUsers(List<User> users, String imgUrl) {
         return users.stream().map(user ->
                 new UserDto(user.getId(),
                         user.getUsername(),
                         user.getFavoriteGenres(),
-                        user.getFavoriteMovies(),
-                        user.getReminderMovies()))
+                        mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
+                        mapMovies(user.getNotificationsMovie().stream().toList(), imgUrl)))
                 .collect(Collectors.toList());
     }
 
-    public static UserDto mapUser(User user) {
+    public static UserDto mapUser(User user, String imgUrl) {
         return new UserDto(user.getId(),
                 user.getUsername(),
                 user.getFavoriteGenres(),
-                user.getFavoriteMovies(),
-                user.getReminderMovies());
+                mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
+                mapMovies(user.getNotificationsMovie().stream().toList(), imgUrl));
     }
 
     public static MoviesDto mapMovie(Movie movie, String imgUrl) {
@@ -72,6 +71,19 @@ public class Mapper {
                         movie.getRuntime(),
                         movie.getStatus(),
                         movie.getVote_average())).collect(Collectors.toList());
+    }
+
+    public static Movie mapMovieForm(MovieFormDto movie, List<Genre> genres) {
+        return new Movie(movie.getId(),
+                        movie.getTitle(),
+                        movie.getOverview(),
+                        movie.getOriginal_language(),
+                        movie.getRelease_date(),
+                        mapGenresId(movie.getGenre_ids(), genres),
+                        movie.getPoster_path(),
+                        movie.getRuntime(),
+                        movie.getStatus(),
+                        movie.getVote_average());
     }
 
     public static List<Genre> mapGenresId(Collection<Integer> genres_id, List<Genre> genres) {

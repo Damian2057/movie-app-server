@@ -1,6 +1,5 @@
 package com.mobile.server.model;
 
-import com.mobile.server.exception.types.ApiExceptions;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,18 +25,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
     private Set<Genre> favoriteGenres = new HashSet<>();
     private Set<Movie> favoriteMovies = new HashSet<>();
-    private Set<Movie> reminderMovies = new HashSet<>();
-
-    private User(User user) {
-        this.id = user.id;
-        this.username = user.username;
-        this.emailAddress = user.emailAddress;
-        this.password = user.password;
-        this.roles = user.roles;
-        this.favoriteGenres = user.favoriteGenres;
-        this.favoriteMovies = user.favoriteMovies;
-        this.reminderMovies = user.reminderMovies;
-    }
+    private Set<Movie> notificationsMovie = new HashSet<>();
 
     public void addGenre(Genre genre) {
         favoriteGenres.add(genre);
@@ -56,70 +44,19 @@ public class User {
     }
 
     public void addRemMovie(Movie movie) {
-        reminderMovies.add(movie);
+        notificationsMovie.add(movie);
     }
 
     public void removeRemMovie(Movie movie) {
-        reminderMovies.remove(movie);
+        notificationsMovie.remove(movie);
     }
 
     public void addGenreList(List<Genre> genres) {
         favoriteGenres.addAll(genres);
     }
 
-    public static final class UserBuilder {
-        private final User user = new User();
-
-        public UserBuilder newInstance() {
-            return new UserBuilder();
-        }
-
-        public UserBuilder setId(String id) {
-            user.id = id;
-            return this;
-        }
-
-        public UserBuilder setNickName(String nickName) {
-            user.username = nickName;
-            return this;
-        }
-
-        public UserBuilder setEmailAddress(String emailAddress) {
-            user.emailAddress = emailAddress;
-            return this;
-        }
-
-        public UserBuilder setPassword(String password) {
-            user.password = password;
-            return this;
-        }
-
-        public UserBuilder setRoles(Set<Role> roles) {
-            user.roles = roles;
-            return this;
-        }
-
-        public UserBuilder setGenres(Set<Genre> genres) {
-            user.favoriteGenres = genres;
-            return this;
-        }
-
-        public UserBuilder setFavouriteMovies(Set<Movie> movies) {
-            user.favoriteMovies = movies;
-            return this;
-        }
-
-        public UserBuilder setReminderMovies(Set<Movie> movies) {
-            user.reminderMovies = movies;
-            return this;
-        }
-
-        public User build() {
-            if(user.username.isBlank() || user.password.isBlank() || user.emailAddress.isBlank()) {
-                throw new ApiExceptions.ParameterException("Required options are not completed");
-            }
-            return new User(user);
-        }
+    public void addMovieList(List<Movie> movies) {
+        favoriteMovies.addAll(movies);
     }
 
 }

@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface MovieService {
     List<Movie> getMovieSearch(String query, String page);
-    List<Movie> getMoviesSearch(String genre);
-    List<Movie> getAllMovies(String page);
     Movie getMovieByID(String id);
     Genre getGenre(int id);
     Genre getGenre(String name);
@@ -19,4 +17,6 @@ public interface MovieService {
     List<Movie> getMoviesByGenre(String genre, String page);
 
     List<Genre> getGenreList(List<String> genres);
+
+    List<Movie> getMovieList(List<String> titles);
 }

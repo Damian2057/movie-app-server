@@ -39,7 +39,7 @@ public class MovieApiConnection implements Closeable {
     }
 
     public void appendParam(String appendParam) {
-        this.appendParam += "&" + appendParam;
+        this.appendParam += "&" + appendParam.replace(" ", "%20");
     }
 
     public void buildRequest() {
