@@ -26,7 +26,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
     private Set<Genre> favoriteGenres = new HashSet<>();
     private Set<Movie> favoriteMovies = new HashSet<>();
-    private Set<Movie> reminderMovies = new HashSet<>();
+    private Set<Movie> notificationsMovie = new HashSet<>();
 
     private User(User user) {
         this.id = user.id;
@@ -36,7 +36,7 @@ public class User {
         this.roles = user.roles;
         this.favoriteGenres = user.favoriteGenres;
         this.favoriteMovies = user.favoriteMovies;
-        this.reminderMovies = user.reminderMovies;
+        this.notificationsMovie = user.notificationsMovie;
     }
 
     public void addGenre(Genre genre) {
@@ -56,11 +56,11 @@ public class User {
     }
 
     public void addRemMovie(Movie movie) {
-        reminderMovies.add(movie);
+        notificationsMovie.add(movie);
     }
 
     public void removeRemMovie(Movie movie) {
-        reminderMovies.remove(movie);
+        notificationsMovie.remove(movie);
     }
 
     public void addGenreList(List<Genre> genres) {
@@ -114,7 +114,7 @@ public class User {
         }
 
         public UserBuilder setReminderMovies(Set<Movie> movies) {
-            user.reminderMovies = movies;
+            user.notificationsMovie = movies;
             return this;
         }
 

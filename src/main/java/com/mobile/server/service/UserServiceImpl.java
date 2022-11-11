@@ -153,4 +153,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return savedUser;
     }
 
+    @Override
+    public Optional<User> addNotifiMovieToUser(User user, Movie movie) {
+        log.info("Adding Movie notification {} to user {}", movie.getTitle(), user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.addRemMovie(movie);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
+    @Override
+    public Optional<User> removeNotifiMovieFromUser(User user, Movie movie) {
+        log.info("Remove Movie notification {} from user {}", movie.getTitle(), user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.removeRemMovie(movie);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
 }

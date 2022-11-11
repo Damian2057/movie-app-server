@@ -112,6 +112,13 @@ public class MovieController {
         return new ResponseEntity<>(getUserFromHeader(request).getFavoriteMovies(), HttpStatus.OK);
     }
 
+    @GetMapping("/searchMovie/{page}/{query}")
+    public ResponseEntity<Collection<MoviesDto>> searchMovie(@PathVariable(value = "page") String page,
+                                                         @PathVariable(value = "query") String query) {
+        return new ResponseEntity<>(Mapper.mapMovies(movieService.getMovieSearch(query, page), apiProperties.getImg()),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/getMovieByID/{id}")
     public ResponseEntity<MoviesDto> getMovieByID(@PathVariable(value = "id") String id) {
         return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByID(id), apiProperties.getImg()), HttpStatus.OK);
@@ -126,6 +133,18 @@ public class MovieController {
     public ResponseEntity<List<MoviesDto>> getMovieByGenre(@PathVariable(value = "genre") String genre,
                                                      @PathVariable(value = "page") String page) {
         return new ResponseEntity<>(Mapper.mapMovies(movieService.getMoviesByGenre(genre, page), apiProperties.getImg()), HttpStatus.OK);
+    }
+
+    @PutMapping("/addNotifiMovie/{name}")
+    public ResponseEntity<?> addNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.addNotifiMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/removeNotifiMovie/{name}")
+    public ResponseEntity<?> removeNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.removeNotifiMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     private User getUserFromHeader(HttpServletRequest request) {

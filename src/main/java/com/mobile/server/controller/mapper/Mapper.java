@@ -7,7 +7,6 @@ import com.mobile.server.model.Genre;
 import com.mobile.server.model.Movie;
 import com.mobile.server.model.User;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +20,7 @@ public class Mapper {
                         user.getUsername(),
                         user.getFavoriteGenres(),
                         mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
-                        mapMovies(user.getReminderMovies().stream().toList(), imgUrl)))
+                        mapMovies(user.getNotificationsMovie().stream().toList(), imgUrl)))
                 .collect(Collectors.toList());
     }
 
@@ -30,7 +29,7 @@ public class Mapper {
                 user.getUsername(),
                 user.getFavoriteGenres(),
                 mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
-                mapMovies(user.getReminderMovies().stream().toList(), imgUrl));
+                mapMovies(user.getNotificationsMovie().stream().toList(), imgUrl));
     }
 
     public static MoviesDto mapMovie(Movie movie, String imgUrl) {

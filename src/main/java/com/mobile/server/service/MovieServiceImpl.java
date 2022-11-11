@@ -41,29 +41,11 @@ public class MovieServiceImpl implements MovieService {
             String response = apiConnection.response();
 
             Gson gson = new Gson();
-//            List<Movie> nameList = gson.fromJson(response, Genres.class);
-//            return nameList.getGenres();
+            MovieForm nameList = gson.fromJson(response, MovieForm.class);
+            return Mapper.mapMoviesForm(nameList.getResults(), getGenres());
         } catch (ApiExceptions.ConnectionException | IOException e) {
             throw new ApiExceptions.ConnectionException("Error connecting to movie api");
         }
-        return null;
-    }
-
-    @Override
-    public List<Movie> getAllMovies(String page) {
-//        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
-//            apiConnection.setRequestMethod("GET");
-//            apiConnection.appendEndPoint("/genre/movie/list");
-//            apiConnection.buildRequest();
-//            String response = apiConnection.response();
-//
-//            Gson gson = new Gson();
-//            Genres nameList = gson.fromJson(response, Genres.class);
-//            return nameList.getGenres();
-//        } catch (ApiExceptions.ConnectionException | IOException e) {
-//            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
-//        }
-        return null;
     }
 
     @Override
@@ -79,11 +61,6 @@ public class MovieServiceImpl implements MovieService {
         } catch (ApiExceptions.ConnectionException | IOException e) {
             throw new ApiExceptions.ConnectionException("Error connecting to movie api");
         }
-    }
-
-    @Override
-    public List<Movie> getMoviesSearch(String genre) {
-        return null;
     }
 
     @Override
