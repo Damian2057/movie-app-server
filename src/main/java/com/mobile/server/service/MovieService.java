@@ -1,6 +1,5 @@
 package com.mobile.server.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mobile.server.model.Genre;
 import com.mobile.server.model.Movie;
 
@@ -18,4 +17,6 @@ public interface MovieService {
     Movie getMovieByName(String name);
 
     List<Movie> getMoviesByGenre(String genre, String page);
+
+    List<Genre> getGenreList(List<String> genres);
 }

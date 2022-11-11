@@ -120,4 +120,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return savedUser;
     }
 
+    @Override
+    public Optional<User> addGenreListToUser(User user, List<Genre> genres) {
+        log.info("Adding genre {} to user {}", genres, user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.addGenreList(genres);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
 }

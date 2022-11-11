@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -135,6 +136,11 @@ public class MovieServiceImpl implements MovieService {
         } catch (ApiExceptions.ConnectionException | IOException e) {
             throw new ApiExceptions.ConnectionException("Error connecting to movie api");
         }
+    }
+
+    @Override
+    public List<Genre> getGenreList(List<String> genres) {
+        return genres.stream().map(this::getSingleGenreByName).collect(Collectors.toList());
     }
 
     private Genre getSingleGenreById(String name) {
