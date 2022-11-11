@@ -1,5 +1,6 @@
 package com.mobile.server.controller.dto;
 
+import com.mobile.server.controller.pojo.MoviesDto;
 import com.mobile.server.model.Genre;
 import com.mobile.server.model.Movie;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,6 @@ public class UserDto {
     private String id;
     private String username;
     private Collection<Genre> favoriteGenres;
-    private Collection<Movie> favoriteMovies;
-    private Collection<Movie> reminderMovies;
+    private Collection<MoviesDto> favoriteMovies;
+    private Collection<MoviesDto> reminderMovies;
 }

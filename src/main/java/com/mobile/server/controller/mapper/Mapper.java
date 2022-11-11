@@ -7,30 +7,30 @@ import com.mobile.server.model.Genre;
 import com.mobile.server.model.Movie;
 import com.mobile.server.model.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Mapper {
 
-    public static List<UserDto> mapUsers(List<User> users) {
+    public static List<UserDto> mapUsers(List<User> users, String imgUrl) {
         return users.stream().map(user ->
                 new UserDto(user.getId(),
                         user.getUsername(),
                         user.getFavoriteGenres(),
-                        user.getFavoriteMovies(),
-                        user.getReminderMovies()))
+                        mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
+                        mapMovies(user.getReminderMovies().stream().toList(), imgUrl)))
                 .collect(Collectors.toList());
     }
 
-    public static UserDto mapUser(User user) {
+    public static UserDto mapUser(User user, String imgUrl) {
         return new UserDto(user.getId(),
                 user.getUsername(),
                 user.getFavoriteGenres(),
-                user.getFavoriteMovies(),
-                user.getReminderMovies());
+                mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
+                mapMovies(user.getReminderMovies().stream().toList(), imgUrl));
     }
 
     public static MoviesDto mapMovie(Movie movie, String imgUrl) {
