@@ -66,10 +66,15 @@ public class MovieController {
      * removes genre from specific user
      * @return affected user
      */
-    @PutMapping("/removeGenre/{name}")
+    @DeleteMapping("/removeGenre/{name}")
     public ResponseEntity<UserDto> removeGenre(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.removeGenreFromUser(getUserFromHeader(request), movieService.getGenre(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/getGenreByID/{id}")
+    public ResponseEntity<Genre> getGenreByID(@PathVariable(value = "id") String id) {
+        return new ResponseEntity<>(movieService.getGenre(Integer.parseInt(id)), HttpStatus.OK);
     }
 
     /**
@@ -99,7 +104,7 @@ public class MovieController {
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/removeMovie/{name}")
+    @DeleteMapping("/removeMovie/{name}")
     public ResponseEntity<UserDto> removeMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.removeMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
@@ -153,7 +158,7 @@ public class MovieController {
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/removeNotifyMovie/{name}")
+    @DeleteMapping("/removeNotifyMovie/{name}")
     public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request,
                                                             @PathVariable(value = "name") String name) throws ParseException {
         movieNotifyRefresh(request);

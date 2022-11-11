@@ -7,6 +7,12 @@ public class ApiExceptions {
         }
     }
 
+    public static class InvalidLoginDetails extends RuntimeException{
+        public InvalidLoginDetails(String message) {
+            super(message);
+        }
+    }
+
     public static class LogicException extends RuntimeException {
         public LogicException(String message) {
             super(message);
