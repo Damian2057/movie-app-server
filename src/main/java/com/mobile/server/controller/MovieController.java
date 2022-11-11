@@ -89,13 +89,13 @@ public class MovieController {
     }
 
     @PutMapping("/addMovie/{name}")
-    public ResponseEntity<?> addMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> addMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.addMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/removeMovie/{name}")
-    public ResponseEntity<?> removeMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> removeMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.removeMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
@@ -136,13 +136,13 @@ public class MovieController {
     }
 
     @PutMapping("/addNotifyMovie/{name}")
-    public ResponseEntity<?> addNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> addNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.addNotifiMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/removeNotifyMovie/{name}")
-    public ResponseEntity<?> removeNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.removeNotifiMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }

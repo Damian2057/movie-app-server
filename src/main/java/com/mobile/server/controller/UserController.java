@@ -46,7 +46,7 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<UserDto> getUser(HttpServletRequest request) {
-        return new ResponseEntity<>(Mapper.mapUser(getUserFromHeader(request), apiProperties.getImg()), HttpStatus.CONTINUE);
+        return new ResponseEntity<>(Mapper.mapUser(getUserFromHeader(request), apiProperties.getImg()), HttpStatus.OK);
     }
 
 

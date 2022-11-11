@@ -2,7 +2,6 @@ package com.mobile.server.controller.dto;
 
 import com.mobile.server.controller.pojo.MoviesDto;
 import com.mobile.server.model.Genre;
-import com.mobile.server.model.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
