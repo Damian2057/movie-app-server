@@ -67,6 +67,10 @@ public class User {
         favoriteGenres.addAll(genres);
     }
 
+    public void addMovieList(List<Movie> movies) {
+        favoriteMovies.addAll(movies);
+    }
+
     public static final class UserBuilder {
         private final User user = new User();
 

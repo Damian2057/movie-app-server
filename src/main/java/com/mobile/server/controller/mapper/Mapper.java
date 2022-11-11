@@ -74,6 +74,19 @@ public class Mapper {
                         movie.getVote_average())).collect(Collectors.toList());
     }
 
+    public static Movie mapMovieForm(MovieFormDto movie, List<Genre> genres) {
+        return new Movie(movie.getId(),
+                        movie.getTitle(),
+                        movie.getOverview(),
+                        movie.getOriginal_language(),
+                        movie.getRelease_date(),
+                        mapGenresId(movie.getGenre_ids(), genres),
+                        movie.getPoster_path(),
+                        movie.getRuntime(),
+                        movie.getStatus(),
+                        movie.getVote_average());
+    }
+
     public static List<Genre> mapGenresId(Collection<Integer> genres_id, List<Genre> genres) {
         return genres_id.stream().map(genre -> genres.stream().parallel().filter(x ->
                 Objects.equals(x.getId(), genre)).findFirst().get()).collect(Collectors.toList());

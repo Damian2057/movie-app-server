@@ -10,6 +10,7 @@ import com.mobile.server.controller.dto.UserDto;
 import com.mobile.server.controller.mapper.Mapper;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
+import com.mobile.server.model.Movie;
 import com.mobile.server.model.User;
 import com.mobile.server.service.MovieService;
 import com.mobile.server.service.UserService;
@@ -91,7 +92,6 @@ public class MovieController {
     @PutMapping("/addMovie/{name}")
     public ResponseEntity<?> addMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.addMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
-        //TODO: not working yet
         return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
@@ -102,9 +102,14 @@ public class MovieController {
     }
 
     @PutMapping("/addMovieList")
-    public ResponseEntity<?> addMovieList() {
-        //TODO: not working yet
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> addMovieList(HttpServletRequest request, @RequestBody List<String> titles) {
+        Optional<User> user = userService.addMovieListToUser(getUserFromHeader(request), movieService.getMovieList(titles));
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/getUserMovieList")
+    public ResponseEntity<Collection<Movie>> getUserMovieList(HttpServletRequest request) {
+        return new ResponseEntity<>(getUserFromHeader(request).getFavoriteMovies(), HttpStatus.OK);
     }
 
     @GetMapping("/getMovieByID/{id}")

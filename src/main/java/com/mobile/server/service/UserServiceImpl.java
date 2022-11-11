@@ -142,4 +142,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return savedUser;
     }
 
+    @Override
+    public Optional<User> addMovieListToUser(User user, List<Movie> movies) {
+        log.info("Adding movies {} to user {}", movies, user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.addMovieList(movies);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
 }

@@ -58,5 +58,7 @@ public interface UserService {
 
     Optional<User> addGenreListToUser(User user, List<Genre> genres);
 
-    Optional<User> removeMovieFromUser(User userFromHeader, Movie movieByName);
+    Optional<User> removeMovieFromUser(User user, Movie movie);
+
+    Optional<User> addMovieListToUser(User user, List<Movie> movies);
 }

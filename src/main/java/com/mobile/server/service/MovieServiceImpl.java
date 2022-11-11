@@ -103,20 +103,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie getMovieByName(String name) {
-        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
-            apiConnection.setRequestMethod("GET");
-            apiConnection.appendEndPoint("/search/movie");
-            apiConnection.appendParam("query="+ '"' + name + '"');
-            apiConnection.buildRequest();
-            var response = apiConnection.response();
-            System.out.println(response);
-//            Gson gson = new Gson();
-//            MovieForm movieForm = gson.fromJson(response, MovieForm.class);
-//            return Mapper.movieFormToMovie(movieForm);
-            return null;
-        } catch (ApiExceptions.ConnectionException | IOException e) {
-            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
-        }
+        return getMovieByNameInternal(name);
     }
 
     @Override
@@ -140,6 +127,11 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Genre> getGenreList(List<String> genres) {
         return genres.stream().map(this::getSingleGenreByName).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Movie> getMovieList(List<String> titles) {
+        return titles.stream().map(this::getMovieByName).collect(Collectors.toList());
     }
 
     private Genre getSingleGenreById(String name) {
@@ -176,6 +168,21 @@ public class MovieServiceImpl implements MovieService {
             Gson gson = new Gson();
             Genres nameList = gson.fromJson(response, Genres.class);
             return nameList.getGenres();
+        } catch (ApiExceptions.ConnectionException | IOException e) {
+            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+        }
+    }
+
+    private Movie getMovieByNameInternal(String name) {
+        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
+            apiConnection.setRequestMethod("GET");
+            apiConnection.appendEndPoint("/search/movie");
+            apiConnection.appendParam("query=" + name);
+            apiConnection.buildRequest();
+            var response = apiConnection.response();
+            Gson gson = new Gson();
+            MovieForm movieForm = gson.fromJson(response, MovieForm.class);
+            return Mapper.mapMovieForm(movieForm.getResults().get(0), getGenreList());
         } catch (ApiExceptions.ConnectionException | IOException e) {
             throw new ApiExceptions.ConnectionException("Error connecting to movie api");
         }
