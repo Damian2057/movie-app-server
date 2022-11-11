@@ -63,7 +63,7 @@ public class MovieController {
      */
     @PutMapping("/removeGenre/{name}")
     public ResponseEntity<UserDto> removeGenre(HttpServletRequest request, @PathVariable(value = "name") String name) {
-        Optional<User> user = userService.removeGenreToUser(getUserFromHeader(request), movieService.getGenre(name));
+        Optional<User> user = userService.removeGenreFromUser(getUserFromHeader(request), movieService.getGenre(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
@@ -91,18 +91,19 @@ public class MovieController {
     @PutMapping("/addMovie/{name}")
     public ResponseEntity<?> addMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.addMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        //TODO: not working yet
         return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/removeMovie/{name}")
     public ResponseEntity<?> removeMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
-        //TODO:?
-        return ResponseEntity.ok().build();
+        Optional<User> user = userService.removeMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/addMovieList")
     public ResponseEntity<?> addMovieList() {
-        //TODO:?
+        //TODO: not working yet
         return ResponseEntity.ok().build();
     }
 

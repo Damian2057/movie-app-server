@@ -110,7 +110,6 @@ public class MovieServiceImpl implements MovieService {
             apiConnection.buildRequest();
             var response = apiConnection.response();
             System.out.println(response);
-            //TODO: response is empty
 //            Gson gson = new Gson();
 //            MovieForm movieForm = gson.fromJson(response, MovieForm.class);
 //            return Mapper.movieFormToMovie(movieForm);

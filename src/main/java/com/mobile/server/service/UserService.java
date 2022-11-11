@@ -52,9 +52,11 @@ public interface UserService {
 
     Optional<User> addGenreToUser(User user, Genre genre);
 
-    Optional<User> removeGenreToUser(User user, Genre genre);
+    Optional<User> removeGenreFromUser(User user, Genre genre);
 
     Optional<User> addMovieToUser(User user, Movie movie);
 
     Optional<User> addGenreListToUser(User user, List<Genre> genres);
+
+    Optional<User> removeMovieFromUser(User userFromHeader, Movie movieByName);
 }

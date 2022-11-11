@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<User> removeGenreToUser(User user, Genre genre) {
+    public Optional<User> removeGenreFromUser(User user, Genre genre) {
         log.info("Removing genre {} from user {}", genre.getName(), user.getUsername());
         Optional<User> savedUser = userRepository.findById(user.getId());
         savedUser.ifPresent(user1 -> {
@@ -126,6 +126,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Optional<User> savedUser = userRepository.findById(user.getId());
         savedUser.ifPresent(user1 -> {
             user1.addGenreList(genres);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
+    @Override
+    public Optional<User> removeMovieFromUser(User user, Movie movie) {
+        log.info("Removing movie {} from user {}", movie.getTitle(), user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.removeMovie(movie);
             userRepository.save(user1);
         });
         return savedUser;
