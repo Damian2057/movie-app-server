@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -193,6 +192,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             conditionDate = DateUtils.addWeeks(new Date(), Integer.parseInt(date.replaceAll("[^0-9.]", "")));
         } else if (date.contains("M") || date.contains("m")) {
             conditionDate = DateUtils.addMonths(new Date(), Integer.parseInt(date.replaceAll("[^0-9.]", "")));
+        } else if (date.contains("D") || date.contains("d")) {
+            conditionDate = DateUtils.addDays(new Date(), Integer.parseInt(date.replaceAll("[^0-9.]", "")));
         } else {
             throw new ApiExceptions.ParameterException("unsupported date range format");
         }

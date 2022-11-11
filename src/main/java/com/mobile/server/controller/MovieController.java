@@ -72,6 +72,11 @@ public class MovieController {
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/getGenreByID/{id}")
+    public ResponseEntity<Genre> getGenreByID(@PathVariable(value = "id") String id) {
+        return new ResponseEntity<>(movieService.getGenre(Integer.parseInt(id)), HttpStatus.OK);
+    }
+
     /**
      * adds genre list to a specific user
      * ["Action", "Documentary"]

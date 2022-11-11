@@ -2,7 +2,6 @@ package com.mobile.server.service;
 
 import com.mobile.server.model.Genre;
 import com.mobile.server.model.Movie;
-import com.mobile.server.model.User;
 
 import java.io.IOException;
 import java.util.List;
