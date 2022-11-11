@@ -53,9 +53,9 @@ public class MovieController {
      * adds genre to a specific user
      * @return affected user
      */
-    @PutMapping("/addGenre")
-    public ResponseEntity<UserDto> addGenre(HttpServletRequest request, @RequestBody GenreForm name) {
-        Optional<User> user = userService.addGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
+    @PutMapping("/addGenre/{name}")
+    public ResponseEntity<UserDto> addGenre(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.addGenreToUser(getUserFromHeader(request), movieService.getGenre(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
@@ -63,9 +63,9 @@ public class MovieController {
      * removes genre from specific user
      * @return affected user
      */
-    @PutMapping("/removeGenre")
-    public ResponseEntity<UserDto> removeGenre(HttpServletRequest request, @RequestBody GenreForm name) {
-        Optional<User> user = userService.removeGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
+    @PutMapping("/removeGenre/{name}")
+    public ResponseEntity<UserDto> removeGenre(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.removeGenreToUser(getUserFromHeader(request), movieService.getGenre(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
@@ -75,7 +75,7 @@ public class MovieController {
      * @return collection of genres
      */
     @GetMapping("/getUserGenreList")
-    public ResponseEntity<Collection<Genre>> getUserGenreList(HttpServletRequest request) throws IOException {
+    public ResponseEntity<Collection<Genre>> getUserGenreList(HttpServletRequest request) {
         return new ResponseEntity<>(getUserFromHeader(request).getFavoriteGenres(), HttpStatus.OK);
     }
 
