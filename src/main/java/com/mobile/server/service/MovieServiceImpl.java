@@ -28,22 +28,58 @@ public class MovieServiceImpl implements MovieService {
     private final ConnectionFactory factory = new ConnectionFactory();
 
     @Override
-    public Movie getMovie(String title) {
+    public List<Movie> getMovieSearch(String query, String page) {
+        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
+            apiConnection.setRequestMethod("GET");
+            apiConnection.appendEndPoint("/search/movie");
+            apiConnection.appendParam("page=" + page);
+            apiConnection.appendParam("query=" + query);
+            apiConnection.buildRequest();
+            String response = apiConnection.response();
+
+            Gson gson = new Gson();
+//            List<Movie> nameList = gson.fromJson(response, Genres.class);
+//            return nameList.getGenres();
+        } catch (ApiExceptions.ConnectionException | IOException e) {
+            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+        }
         return null;
     }
 
     @Override
-    public List<Movie> getAllMovies() {
+    public List<Movie> getAllMovies(String page) {
 //        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
-//            return null;
-//        } catch (Exception e) {
+//            apiConnection.setRequestMethod("GET");
+//            apiConnection.appendEndPoint("/genre/movie/list");
+//            apiConnection.buildRequest();
+//            String response = apiConnection.response();
+//
+//            Gson gson = new Gson();
+//            Genres nameList = gson.fromJson(response, Genres.class);
+//            return nameList.getGenres();
+//        } catch (ApiExceptions.ConnectionException | IOException e) {
 //            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
 //        }
         return null;
     }
 
     @Override
-    public List<Movie> getMovies(String genre) {
+    public Movie getMovieByID(String id) {
+        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
+            apiConnection.setRequestMethod("GET");
+            apiConnection.appendEndPoint("/movie/" + id);
+            apiConnection.buildRequest();
+            String response = apiConnection.response();
+
+            Gson gson = new Gson();
+            return gson.fromJson(response, Movie.class);
+        } catch (ApiExceptions.ConnectionException | IOException e) {
+            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+        }
+    }
+
+    @Override
+    public List<Movie> getMoviesSearch(String genre) {
         return null;
     }
 

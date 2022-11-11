@@ -4,6 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.mobile.server.configuration.MovieApiProperties;
+import com.mobile.server.controller.dto.MovieDto;
+import com.mobile.server.controller.dto.UserDto;
+import com.mobile.server.controller.mapper.Mapper;
 import com.mobile.server.controller.pojo.GenreForm;
 import com.mobile.server.controller.pojo.RoleToUserForm;
 import com.mobile.server.exception.types.ApiExceptions;
@@ -34,6 +38,8 @@ public class MovieController {
     private MovieService movieService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MovieApiProperties apiProperties;
 
     /**
      * @return All available Genres in the system
@@ -48,9 +54,9 @@ public class MovieController {
      * @return affected user
      */
     @PutMapping("/addGenre")
-    public ResponseEntity<User> addGenre(HttpServletRequest request, @RequestBody GenreForm name) {
+    public ResponseEntity<UserDto> addGenre(HttpServletRequest request, @RequestBody GenreForm name) {
         Optional<User> user = userService.addGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
-        return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     /**
@@ -58,9 +64,9 @@ public class MovieController {
      * @return affected user
      */
     @PutMapping("/removeGenre")
-    public ResponseEntity<User> removeGenre(HttpServletRequest request, @RequestBody GenreForm name) {
+    public ResponseEntity<UserDto> removeGenre(HttpServletRequest request, @RequestBody GenreForm name) {
         Optional<User> user = userService.removeGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
-        return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     /**
@@ -95,9 +101,9 @@ public class MovieController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/getMovie")
-    public ResponseEntity<?> ping() {
-        return ResponseEntity.ok().build();
+    @GetMapping("/getMovie/{id}")
+    public ResponseEntity<MovieDto> getMovieByID(@PathVariable(value = "id") String id) {
+        return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByID(id), apiProperties.getImg()), HttpStatus.OK);
     }
 
     @PutMapping("/removeMovie")

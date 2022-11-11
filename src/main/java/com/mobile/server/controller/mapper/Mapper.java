@@ -1,6 +1,8 @@
 package com.mobile.server.controller.mapper;
 
+import com.mobile.server.controller.dto.MovieDto;
 import com.mobile.server.controller.dto.UserDto;
+import com.mobile.server.model.Movie;
 import com.mobile.server.model.User;
 
 import java.util.List;
@@ -24,6 +26,19 @@ public class Mapper {
                 user.getFavoriteGenres(),
                 user.getFavoriteMovies(),
                 user.getReminderMovies());
+    }
+
+    public static MovieDto mapMovie(Movie movie, String imgUrl) {
+        return new MovieDto(movie.getId(),
+                movie.getTitle(),
+                movie.getOverview(),
+                movie.getOriginal_language(),
+                movie.getRelease_date(),
+                movie.getGenres(),
+                imgUrl.replace("\"","") + movie.getPoster_path(),
+                movie.getRuntime(),
+                movie.getStatus(),
+                movie.getVote_average());
     }
 
 }

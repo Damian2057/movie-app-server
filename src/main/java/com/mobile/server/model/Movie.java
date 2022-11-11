@@ -14,11 +14,12 @@ public class Movie {
 
     private int id;
     private String title;
-    private String description;
-    private String releaseDate;
+    private String overview;
+    private String original_language;
+    private String release_date;
     private Collection<Genre> genres = new ArrayList<>();
-    private String posterPath;
+    private String poster_path;
     private Integer runtime;
-    private Double voteAverage;
-
+    private String status;
+    private Double vote_average;
 }
