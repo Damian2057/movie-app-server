@@ -157,7 +157,7 @@ public class MovieServiceImpl implements MovieService {
             apiConnection.appendEndPoint("/search/movie");
             apiConnection.appendParam("query=" + name);
             apiConnection.buildRequest();
-            var response = apiConnection.response();
+            String response = apiConnection.response();
             Gson gson = new Gson();
             MovieForm movieForm = gson.fromJson(response, MovieForm.class);
             return Mapper.mapMovieForm(movieForm.getResults().get(0), getGenreList());
