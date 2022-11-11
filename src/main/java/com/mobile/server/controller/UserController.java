@@ -6,12 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mobile.server.configuration.MovieApiProperties;
+import com.mobile.server.configuration.TokenProperties;
 import com.mobile.server.controller.dto.UserDto;
 import com.mobile.server.controller.mapper.Mapper;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.service.UserService;
+import com.mobile.server.validation.Check;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,8 @@ public class UserController {
     private final UserService userService;
     @Autowired
     private MovieApiProperties apiProperties;
+    @Autowired
+    private TokenProperties tokenProperties;
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUsers() {
@@ -52,6 +56,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(@RequestBody User user) {
+        Check.validateUser(user);
         return new ResponseEntity<>(Mapper.mapUser(userService.registerUser(user), apiProperties.getImg()), HttpStatus.CREATED);
     }
 
@@ -61,7 +66,7 @@ public class UserController {
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                Algorithm algorithm = Algorithm.HMAC256(tokenProperties.getKey().getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();
@@ -94,7 +99,7 @@ public class UserController {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String refresh_token = authorizationHeader.substring("Bearer ".length());
-            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            Algorithm algorithm = Algorithm.HMAC256(tokenProperties.getKey().getBytes());
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(refresh_token);
             String username = decodedJWT.getSubject();

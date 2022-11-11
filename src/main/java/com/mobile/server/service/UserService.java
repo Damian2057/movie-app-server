@@ -5,6 +5,7 @@ import com.mobile.server.model.Movie;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,7 @@ public interface UserService {
      * @param username user's nickname
      * @param roleName added to the user
      */
+    @Deprecated
     void addRoleToUser(String username, String roleName);
 
     /**
@@ -62,7 +64,10 @@ public interface UserService {
 
     Optional<User> addMovieListToUser(User user, List<Movie> movies);
 
-    Optional<User> addNotifiMovieToUser(User user, Movie movie);
+    Optional<User> addNotifiMovieToUser(User user, Movie movie) throws ParseException;
 
     Optional<User> removeNotifiMovieFromUser(User user, Movie movie);
+    List<Movie> getMovieNotificationByDate(User user, String date);
+
+    void refreshNotify(User user) throws ParseException;
 }

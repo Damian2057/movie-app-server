@@ -5,11 +5,13 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mobile.server.configuration.MovieApiProperties;
+import com.mobile.server.configuration.TokenProperties;
 import com.mobile.server.controller.dto.UserDto;
 import com.mobile.server.controller.mapper.Mapper;
 import com.mobile.server.controller.pojo.MoviesDto;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
+import com.mobile.server.model.Movie;
 import com.mobile.server.model.User;
 import com.mobile.server.service.MovieService;
 import com.mobile.server.service.UserService;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +41,8 @@ public class MovieController {
     private UserService userService;
     @Autowired
     private MovieApiProperties apiProperties;
+    @Autowired
+    private TokenProperties tokenProperties;
 
     /**
      * @return All available Genres in the system
@@ -129,6 +134,11 @@ public class MovieController {
         return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByName(name), apiProperties.getImg()), HttpStatus.OK);
     }
 
+    @GetMapping("/getMovieByName/{name}/image")
+    public ResponseEntity<String> getMovieImageByName(@PathVariable(value = "name") String name) {
+        return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByName(name), apiProperties.getImg()).getPoster_path(), HttpStatus.OK);
+    }
+
     @GetMapping("/getMovieByGenre/{genre}/{page}")
     public ResponseEntity<List<MoviesDto>> getMovieByGenre(@PathVariable(value = "genre") String genre,
                                                      @PathVariable(value = "page") String page) {
@@ -136,28 +146,45 @@ public class MovieController {
     }
 
     @PutMapping("/addNotifyMovie/{name}")
-    public ResponseEntity<UserDto> addNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> addNotificationsMovie(HttpServletRequest request,
+                                                         @PathVariable(value = "name") String name) throws ParseException {
+        movieNotifyRefresh(request);
         Optional<User> user = userService.addNotifiMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/removeNotifyMovie/{name}")
-    public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request,
+                                                            @PathVariable(value = "name") String name) throws ParseException {
+        movieNotifyRefresh(request);
         Optional<User> user = userService.removeNotifiMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/getUserNotifyMovieList")
-    public ResponseEntity<List<MoviesDto>> getUserNotifyMovieList(HttpServletRequest request) {
+    public ResponseEntity<List<MoviesDto>> getUserNotifyMovieList(HttpServletRequest request) throws ParseException {
+        movieNotifyRefresh(request);
         return new ResponseEntity<>(Mapper.mapMovies(getUserFromHeader(request).getNotificationsMovie().stream().toList(),
                 apiProperties.getImg()), HttpStatus.OK);
+    }
+
+    @GetMapping("/getUserNotifyMovieByDate/{timeRange}")
+    public ResponseEntity<List<MoviesDto>> getUserNotifyMovieByTimeRange(HttpServletRequest request,
+                                                                         @PathVariable(value = "timeRange") String timeRange) throws ParseException {
+        movieNotifyRefresh(request);
+        List<Movie> movies = userService.getMovieNotificationByDate(getUserFromHeader(request), timeRange);
+        return new ResponseEntity<>(Mapper.mapMovies(movies, apiProperties.getImg()), HttpStatus.OK);
+    }
+
+    private void movieNotifyRefresh(HttpServletRequest request) throws ParseException {
+        userService.refreshNotify(getUserFromHeader(request));
     }
 
     private User getUserFromHeader(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String refresh_token = authorizationHeader.substring("Bearer ".length());
-            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            Algorithm algorithm = Algorithm.HMAC256(tokenProperties.getKey().getBytes());
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(refresh_token);
             String username = decodedJWT.getSubject();

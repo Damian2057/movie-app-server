@@ -9,6 +9,7 @@ import com.mobile.server.repository.RoleRepository;
 import com.mobile.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -154,7 +158,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<User> addNotifiMovieToUser(User user, Movie movie) {
+    public Optional<User> addNotifiMovieToUser(User user, Movie movie) throws ParseException {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if(date.after(sdf.parse(movie.getRelease_date()))) {
+            throw new ApiExceptions.InvalidBusinessArgumentException("A movie that has already had a premiere cannot be added");
+        }
         log.info("Adding Movie notification {} to user {}", movie.getTitle(), user.getUsername());
         Optional<User> savedUser = userRepository.findById(user.getId());
         savedUser.ifPresent(user1 -> {
@@ -173,6 +182,49 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userRepository.save(user1);
         });
         return savedUser;
+    }
+
+    @Override
+    public List<Movie> getMovieNotificationByDate(User user, String date) {
+        List<Movie> movies = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date conditionDate;
+        if(date.contains("W") || date.contains("w")) {
+            conditionDate = DateUtils.addWeeks(new Date(), Integer.parseInt(date.replaceAll("[^0-9.]", "")));
+        } else if (date.contains("M") || date.contains("m")) {
+            conditionDate = DateUtils.addMonths(new Date(), Integer.parseInt(date.replaceAll("[^0-9.]", "")));
+        } else {
+            throw new ApiExceptions.ParameterException("unsupported date range format");
+        }
+        Optional<User> user1 = userRepository.findById(user.getId());
+        user1.ifPresent(x -> {
+            for (Movie movie : x.getNotificationsMovie()) {
+                try {
+                    if(conditionDate.after(sdf.parse(movie.getRelease_date()))) {
+                        movies.add(movie);
+                    }
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return movies;
+    }
+
+    @Override
+    public void refreshNotify(User user) {
+        log.info("Refresh Movie notification for user {}", user.getUsername());
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        user.getNotificationsMovie().removeIf(movie -> {
+            try {
+                return date.after(sdf.parse(movie.getRelease_date()));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        userRepository.save(user);
     }
 
 }
