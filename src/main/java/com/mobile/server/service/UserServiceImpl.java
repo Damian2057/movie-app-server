@@ -9,6 +9,7 @@ import com.mobile.server.repository.RoleRepository;
 import com.mobile.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -181,6 +182,33 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userRepository.save(user1);
         });
         return savedUser;
+    }
+
+    @Override
+    public List<Movie> getMovieNotificationByDate(User user, String date) {
+        List<Movie> movies = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date conditionDate;
+        if(date.contains("W") || date.contains("w")) {
+            conditionDate = DateUtils.addWeeks(new Date(), Integer.parseInt(date.replaceAll("[^0-9.]", "")));
+        } else if (date.contains("M") || date.contains("m")) {
+            conditionDate = DateUtils.addMonths(new Date(), Integer.parseInt(date.replaceAll("[^0-9.]", "")));
+        } else {
+            throw new ApiExceptions.ParameterException("unsupported date range format");
+        }
+        Optional<User> user1 = userRepository.findById(user.getId());
+        user1.ifPresent(x -> {
+            for (Movie movie : x.getNotificationsMovie()) {
+                try {
+                    if(conditionDate.after(sdf.parse(movie.getRelease_date()))) {
+                        movies.add(movie);
+                    }
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return movies;
     }
 
     @Override

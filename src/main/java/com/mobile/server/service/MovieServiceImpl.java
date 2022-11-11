@@ -10,6 +10,7 @@ import com.mobile.server.controller.pojo.MovieForm;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
 import com.mobile.server.model.Movie;
+import com.mobile.server.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

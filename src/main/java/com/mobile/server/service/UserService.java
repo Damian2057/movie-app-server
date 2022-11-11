@@ -33,6 +33,7 @@ public interface UserService {
      * @param username user's nickname
      * @param roleName added to the user
      */
+    @Deprecated
     void addRoleToUser(String username, String roleName);
 
     /**
@@ -66,6 +67,7 @@ public interface UserService {
     Optional<User> addNotifiMovieToUser(User user, Movie movie) throws ParseException;
 
     Optional<User> removeNotifiMovieFromUser(User user, Movie movie);
+    List<Movie> getMovieNotificationByDate(User user, String date);
 
     void refreshNotify(User user) throws ParseException;
 }

@@ -11,6 +11,7 @@ import com.mobile.server.controller.mapper.Mapper;
 import com.mobile.server.controller.pojo.MoviesDto;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
+import com.mobile.server.model.Movie;
 import com.mobile.server.model.User;
 import com.mobile.server.service.MovieService;
 import com.mobile.server.service.UserService;
@@ -133,6 +134,11 @@ public class MovieController {
         return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByName(name), apiProperties.getImg()), HttpStatus.OK);
     }
 
+    @GetMapping("/getMovieByName/{name}/image")
+    public ResponseEntity<String> getMovieImageByName(@PathVariable(value = "name") String name) {
+        return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByName(name), apiProperties.getImg()).getPoster_path(), HttpStatus.OK);
+    }
+
     @GetMapping("/getMovieByGenre/{genre}/{page}")
     public ResponseEntity<List<MoviesDto>> getMovieByGenre(@PathVariable(value = "genre") String genre,
                                                      @PathVariable(value = "page") String page) {
@@ -160,6 +166,14 @@ public class MovieController {
         movieNotifyRefresh(request);
         return new ResponseEntity<>(Mapper.mapMovies(getUserFromHeader(request).getNotificationsMovie().stream().toList(),
                 apiProperties.getImg()), HttpStatus.OK);
+    }
+
+    @GetMapping("/getUserNotifyMovieByDate/{timeRange}")
+    public ResponseEntity<List<MoviesDto>> getUserNotifyMovieByTimeRange(HttpServletRequest request,
+                                                                         @PathVariable(value = "timeRange") String timeRange) throws ParseException {
+        movieNotifyRefresh(request);
+        List<Movie> movies = userService.getMovieNotificationByDate(getUserFromHeader(request), timeRange);
+        return new ResponseEntity<>(Mapper.mapMovies(movies, apiProperties.getImg()), HttpStatus.OK);
     }
 
     private void movieNotifyRefresh(HttpServletRequest request) throws ParseException {
