@@ -35,7 +35,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, apiError, headers, HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler({ApiExceptions.ConnectionException.class, ApiExceptions.LogicException.class, ApiExceptions.ParameterException.class, ApiExceptions.InvalidBusinessArgumentException.class})
+    @ExceptionHandler({ApiExceptions.InvalidLoginDetails.class, ApiExceptions.ConnectionException.class, ApiExceptions.LogicException.class, ApiExceptions.ParameterException.class, ApiExceptions.InvalidBusinessArgumentException.class})
     public final ResponseEntity<Object> handleException(
             RuntimeException exception) {
         final String error = "Status Code: " + HttpStatus.NOT_ACCEPTABLE.value() + ", Exception: " + exception.getClass().getSimpleName();

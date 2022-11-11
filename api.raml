@@ -15,9 +15,35 @@ traits:
       is: ["hasHeaders"]
       description: Retrieve a list of all the users
       responses:
-        200:
+        202:
           body:
             application/json:
+              properties:
+                id:
+                  description: user's ID
+                    type: string
+                    required: true
+                    example: 6367d30b4e6f4a27427963c8
+                username:
+                  description: name on account
+                    type: string
+                    required: true
+                    example: John
+                favoriteGenres:
+                  description: list of genres added to favorites
+                    type: array
+                    required: true
+                    example: [ ]
+                favoriteMovies:
+                  description: list of movies added to favorites
+                    type: array
+                    required: true
+                    example: [ ]
+                notificationsMovie:
+                  description: list of movies added to notification
+                    type: string
+                    required: true
+                    example: [ ]
               example: |
                 [{
                 "id": "6367d30b4e6f4a27427963c8",
@@ -33,9 +59,59 @@ traits:
                   "favoriteMovies": [],
                   "reminderMovies": []
                 }]
+        403:
+          body:
+            application/json:
+              example: |
+                {
+                  "timestamp": "2022-11-11T19:11:06.516+00:00",
+                  "status": 403,
+                  "error": "Forbidden",
+                  "message": "Forbidden",
+                  "path": "/api/users"
+                }
   /user:
-
-
+    get:
+      is: [ "hasHeaders" ]
+      description: Retrieves information about the logged in user
+      responses:
+        200:
+          body:
+            application/json:
+              properties:
+                id:
+                  description: user's ID
+                    type: string
+                    required: true
+                    example: 6367d30b4e6f4a27427963c8
+                username:
+                  description: name on account
+                    type: string
+                    required: true
+                    example: John
+                favoriteGenres:
+                  description: list of genres added to favorites
+                    type: array
+                    required: true
+                    example: []
+                favoriteMovies:
+                  description: list of movies added to favorites
+                    type: array
+                    required: true
+                    example: []
+                notificationsMovie:
+                  description: list of movies added to notification
+                    type: string
+                    required: true
+                    example: []
+              example: |
+                {
+                  "id": "6367d30b4e6f4a27427963c8",
+                  "username": "Test",
+                  "favoriteGenres": [],
+                  "favoriteMovies": [],
+                  "notificationsMovie": []
+                }
   /register:
     post:
       description: user registration endpoint
@@ -43,13 +119,39 @@ traits:
         202:
           body:
             application/json:
+              properties:
+                username:
+                  description: name on account with a minimum length of 5
+                    type: string
+                    required: true
+                    example: John
+                emailAddress:
+                  description: emailAddress which fits in pattern
+                    type: string
+                    required: true
+                    example: John
+                password:
+                  description: password with a minimum length of 8
+                    type: string
+                    required: true
+                    example: John
               example: |
                 {
                 "username": "john",
                 "emailAddress": "example@example.com",
                 "password": "password123"
                 }
-
+        406:
+          body:
+            application/json:
+              example: |
+                {
+                  "httpStatus": "NOT_ACCEPTABLE",
+                  "message": "user's nickname cannot be shorter than 5 characters",
+                  "errors": [
+                    "Status Code: 406, Exception: ParameterException"
+                  ]
+                }
   /login:
     post:
       description: login user
@@ -61,26 +163,34 @@ traits:
                   username:
                     description: name on account
                       type: string
+                      required: true
                       example: John
                   password:
                     description: password
                       type: string
+                      required: true
                       example: John
-
-
+          403:
+            description: Invalid login details
   /token/refresh:
     get:
       description: refresh user token
         responses:
           200:
+            hasHeaders:
+              headers:
+                Authorization:
+                  displayName: Authorization
+                  description: refresh user token by refresh user Bearer Token
+                  type: string
+                  required: true
+          406:
             body:
-              application/headers:
+              application/json:
                 example: |
-                  Authorization:
-                    description: name on account
-                      type: string
-                      example: "eyJ...kNIQ"
-
+                  {
+                    "error_message": "The string '{\"typ\":\"JWT\",\"alg\":\"Hv�3#Sb'' doesn't have a valid JSON format."
+                  }
   /movie:
     /getGenreList:
 
