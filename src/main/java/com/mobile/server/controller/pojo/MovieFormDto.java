@@ -1,22 +1,25 @@
-package com.mobile.server.controller.dto;
+package com.mobile.server.controller.pojo;
 
-import com.mobile.server.model.Genre;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
 
-@AllArgsConstructor
+@Document
+@Data
 @Getter
 @Setter
-public class MovieDto {
+public class MovieFormDto {
     private int id;
     private String title;
     private String overview;
     private String original_language;
     private String release_date;
-    private Collection<Genre> genres;
+    private Collection<Integer> genre_ids;
     private String poster_path;
-    private Integer runtime;
+    private String runtime;
     private String status;
     private Double vote_average;
 }

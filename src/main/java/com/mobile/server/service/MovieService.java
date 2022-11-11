@@ -15,4 +15,7 @@ public interface MovieService {
     Genre getGenre(int id);
     Genre getGenre(String name);
     List<Genre> getGenres() throws IOException;
+    Movie getMovieByName(String name);
+
+    List<Movie> getMoviesByGenre(String genre, String page);
 }

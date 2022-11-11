@@ -5,11 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mobile.server.configuration.MovieApiProperties;
-import com.mobile.server.controller.dto.MovieDto;
+import com.mobile.server.controller.pojo.MoviesDto;
 import com.mobile.server.controller.dto.UserDto;
 import com.mobile.server.controller.mapper.Mapper;
-import com.mobile.server.controller.pojo.GenreForm;
-import com.mobile.server.controller.pojo.RoleToUserForm;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
 import com.mobile.server.model.User;
@@ -89,10 +87,10 @@ public class MovieController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/addMovie")
-    public ResponseEntity<?> addMovie() {
-        //TODO:?
-        return ResponseEntity.ok().build();
+    @PutMapping("/addMovie/{name}")
+    public ResponseEntity<?> addMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.addMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/addMovieList")
@@ -102,8 +100,14 @@ public class MovieController {
     }
 
     @GetMapping("/getMovie/{id}")
-    public ResponseEntity<MovieDto> getMovieByID(@PathVariable(value = "id") String id) {
+    public ResponseEntity<MoviesDto> getMovieByID(@PathVariable(value = "id") String id) {
         return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByID(id), apiProperties.getImg()), HttpStatus.OK);
+    }
+
+    @GetMapping("/getMovieByGenre/{genre}/{page}")
+    public ResponseEntity<List<MoviesDto>> getMovies(@PathVariable(value = "genre") String genre,
+                                                     @PathVariable(value = "page") String page) {
+        return new ResponseEntity<>(Mapper.mapMovies(movieService.getMoviesByGenre(genre, page), apiProperties.getImg()), HttpStatus.OK);
     }
 
     @PutMapping("/removeMovie")

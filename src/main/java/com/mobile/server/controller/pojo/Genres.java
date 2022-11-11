@@ -1,5 +1,6 @@
-package com.mobile.server.model;
+package com.mobile.server.controller.pojo;
 
+import com.mobile.server.model.Genre;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

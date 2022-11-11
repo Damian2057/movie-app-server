@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.mobile.server.api.factory.ConnectionFactory;
 import com.mobile.server.api.httpconnection.MovieApiConnection;
 import com.mobile.server.configuration.MovieApiProperties;
+import com.mobile.server.controller.mapper.Mapper;
+import com.mobile.server.controller.pojo.Genres;
+import com.mobile.server.controller.pojo.MovieForm;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
-import com.mobile.server.model.Genres;
 import com.mobile.server.model.Movie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,12 +87,12 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Genre getGenre(int id) {
-        return getSingleGenre(id);
+        return getSingleGenreById(id);
     }
 
     @Override
     public Genre getGenre(String name) {
-        return getSingleGenre(name);
+        return getSingleGenreById(name);
     }
 
     @Override
@@ -98,7 +100,44 @@ public class MovieServiceImpl implements MovieService {
         return getGenreList();
     }
 
-    private Genre getSingleGenre(String name) {
+    @Override
+    public Movie getMovieByName(String name) {
+        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
+            apiConnection.setRequestMethod("GET");
+            apiConnection.appendEndPoint("/search/movie");
+            apiConnection.appendParam("query="+ '"' + name + '"');
+            apiConnection.buildRequest();
+            var response = apiConnection.response();
+            System.out.println(response);
+            //TODO: response is empty
+//            Gson gson = new Gson();
+//            MovieForm movieForm = gson.fromJson(response, MovieForm.class);
+//            return Mapper.movieFormToMovie(movieForm);
+            return null;
+        } catch (ApiExceptions.ConnectionException | IOException e) {
+            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+        }
+    }
+
+    @Override
+    public List<Movie> getMoviesByGenre(String genre, String page) {
+        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
+            apiConnection.setRequestMethod("GET");
+            apiConnection.appendEndPoint("/discover/movie");
+            apiConnection.appendParam("page=" + page);
+            apiConnection.appendParam("with_genres=" + getSingleGenreByName(genre));
+            apiConnection.buildRequest();
+            String response = apiConnection.response();
+
+            Gson gson = new Gson();
+            MovieForm movieForm = gson.fromJson(response, MovieForm.class);
+            return Mapper.mapMoviesForm(movieForm.getResults(), getGenreList());
+        } catch (ApiExceptions.ConnectionException | IOException e) {
+            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+        }
+    }
+
+    private Genre getSingleGenreById(String name) {
         return getGenreList().stream()
                 .filter(genre -> genre.getName().equalsIgnoreCase(name))
                 .findAny()
@@ -106,9 +145,17 @@ public class MovieServiceImpl implements MovieService {
                         new ApiExceptions.ParameterException(name + " the genre is not available"));
     }
 
-    private Genre getSingleGenre(int id) {
+    private Genre getSingleGenreById(int id) {
         return getGenreList().stream()
                 .filter(genre -> genre.getId().equals(id))
+                .findAny()
+                .orElseThrow(() ->
+                        new ApiExceptions.ParameterException("the genre is not available"));
+    }
+
+    private Genre getSingleGenreByName(String name) {
+        return getGenreList().stream()
+                .filter(genre -> genre.getName().equals(name))
                 .findAny()
                 .orElseThrow(() ->
                         new ApiExceptions.ParameterException("the genre is not available"));

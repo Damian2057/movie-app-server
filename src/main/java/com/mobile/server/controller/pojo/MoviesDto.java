@@ -1,27 +1,22 @@
-package com.mobile.server.model;
+package com.mobile.server.controller.pojo;
 
+import com.mobile.server.model.Genre;
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
-@Document
-@Data
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Movie {
-
+public class MoviesDto {
     private int id;
     private String title;
     private String overview;
     private String original_language;
     private String release_date;
-    private Collection<Genre> genres = new ArrayList<>();
+    private Collection<Genre> genres;
     private String poster_path;
-    private String runtime;
+    private String  runtime;
     private String status;
     private Double vote_average;
 }
