@@ -193,24 +193,674 @@ traits:
                   }
   /movie:
     /getGenreList:
-
-    /addGenre/{name}:
-
-    /removeGenre/{name}:
-
+      get:
+        description: give all available genres
+          responses:
+            200:
+              body:
+                application/json:
+                  properties:
+                    id:
+                      description: genre id
+                        type: Integer
+                        required: true
+                        example: John
+                    name:
+                      description: genre name
+                        type: string
+                        required: 28
+                        example: Action
+                  example: |
+                    [{
+                      "id": 28,
+                      "name": "Action"
+                    },
+                    {
+                      "id": 12,
+                      "name": "Adventure"
+                    }]
+            403:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                    }
+    /addGenre:
+      /{name}:
+        put:
+          description: adds the genre by name to the user's favorite genres
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "TEST",
+                        "favoriteGenres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          }
+                        ],
+                        "favoriteMovies": [],
+                        "notificationsMovie": []
+                      }
+              406:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "NOT_ACCEPTABLE",
+                        "message": "Actiondas the genre is not available",
+                        "errors": [
+                          "Status Code: 406, Exception: ParameterException"
+                        ]
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+    /removeGenre:
+      /{name}:
+        delete:
+          description: removes a genre by name from the user's favorites list
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "TEST",
+                        "favoriteGenres": [],
+                        "favoriteMovies": [],
+                        "notificationsMovie": []
+                      }
+              406:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "NOT_ACCEPTABLE",
+                        "message": "Actiondas the genre is not available",
+                        "errors": [
+                          "Status Code: 406, Exception: ParameterException"
+                        ]
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+    /getGenreByID:
+      /{id}:
+        get:
+          description: find a genre by a specific ID
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": 28,
+                        "name": "Action"
+                      }
+              406:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "NOT_ACCEPTABLE",
+                        "message": "the genre is not available",
+                        "errors": [
+                          "Status Code: 406, Exception: ParameterException"
+                        ]
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
     /addGenreList:
-
+      put:
+        description: adds the genre list to the user's favorite genres
+          responses:
+            202:
+              body:
+                application/json:
+                  properties:
+                    name:
+                      description: genres names
+                        type: String
+                        example: Action
+                  example: |
+                    ["Action", "Documentary"]
+            406:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "httpStatus": "NOT_ACCEPTABLE",
+                      "message": "the genre is not available",
+                      "errors": [
+                        "Status Code: 406, Exception: ParameterException"
+                      ]
+                    }
+            403:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                    }
     /getUserGenreList:
-
-    /addMovie/{name}:
-
-    /removeMovie/{name}:
-
+      get:
+        description: give a list of user's favorite genres
+          responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    [{
+                      "id": 28,
+                      "name": "Action"
+                    },
+                    {
+                      "id": 99,
+                      "name": "Documentary"
+                    }]
+            403:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                    }
+    /addMovie:
+      /{name}:
+        put:
+          description: add a movie by title to user's favorites
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "Dmian12a",
+                        "favoriteGenres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          }],
+                        "favoriteMovies": [
+                          {
+                            "id": 19995,
+                            "title": "Avatar",
+                            "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                            "original_language": "en",
+                            "release_date": "2009-12-15",
+                            "genres": [{
+                                "id": 28,
+                                "name": "Action"
+                              },],
+                            "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                            "runtime": null,
+                            "status": null,
+                            "vote_average": 7.5
+                          }
+                        ],
+                        "notificationsMovie": []
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+    /removeMovie:
+      /{name}:
+        delete:
+          description: remove a movie by title from user's favorites
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "Dmian12a",
+                        "favoriteGenres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          }],
+                        "favoriteMovies": [],
+                        "notificationsMovie": []
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
     /addMovieList:
-
-    /getMovieByID/{id}:
-
-    /getMovieByName/{name}:
-
-    /getMovieByGenre/{genre}/{page}:
-
+      put:
+        description: adds the movie list to the user's favorite movies
+          responses:
+            202:
+              body:
+                application/json:
+                  properties:
+                    name:
+                      description: movies names
+                        type: String
+                        example: Action
+                  example: |
+                    ["Avatar", "Green Book"]
+            403:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                    }
+    /getUserMovieList:
+      get:
+        description: give a list of user's favorite movies
+          responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    [{
+                      "id": 19995,
+                      "title": "Avatar",
+                      "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                      "original_language": "en",
+                      "release_date": "2009-12-15",
+                      "genres": [
+                        {
+                          "id": 28,
+                          "name": "Action"
+                        },
+                        {
+                          "id": 12,
+                          "name": "Adventure"
+                        },
+                        {
+                          "id": 14,
+                          "name": "Fantasy"
+                        },
+                        {
+                          "id": 878,
+                          "name": "Science Fiction"
+                        }
+                      ],
+                      "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                      "runtime": null,
+                      "status": null,
+                      "vote_average": 7.5
+                    }]
+            403:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                    }
+    /searchMovie:
+      /{page}:
+        /{query}:
+          get:
+            description: a list of movies matching the query from a particular page
+              responses:
+                200:
+                  body:
+                    application/json:
+                      example: |
+                        [{
+                          "id": 19995,
+                          "title": "Avatar",
+                          "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                          "original_language": "en",
+                          "release_date": "2009-12-15",
+                          "genres": [
+                            {
+                              "id": 28,
+                              "name": "Action"
+                            },
+                            {
+                              "id": 12,
+                              "name": "Adventure"
+                            },
+                            {
+                              "id": 14,
+                              "name": "Fantasy"
+                            },
+                            {
+                              "id": 878,
+                              "name": "Science Fiction"
+                            }
+                          ],
+                          "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                          "runtime": null,
+                          "status": null,
+                          "vote_average": 7.5
+                        }]
+                403:
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        }
+    /getMovieByID:
+      /{id}:
+        get:
+          description: find a movie by a specific ID
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": 28,
+                        "name": "Action"
+                      }
+              406:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "NOT_ACCEPTABLE",
+                        "message": "Error connecting to movie api",
+                        "errors": [
+                          "Status Code: 406, Exception: ConnectionException"
+                        ]
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+    /getMovieByName:
+      /{name}:
+        get:
+          description: find a movie by a specific name
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": 19995,
+                        "title": "Avatar",
+                        "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                        "original_language": "en",
+                        "release_date": "2009-12-15",
+                        "genres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          },
+                          {
+                            "id": 12,
+                            "name": "Adventure"
+                          },
+                          {
+                            "id": 14,
+                            "name": "Fantasy"
+                          },
+                          {
+                            "id": 878,
+                            "name": "Science Fiction"
+                          }
+                        ],
+                        "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                        "runtime": null,
+                        "status": null,
+                        "vote_average": 7.5
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+      /image:
+        get:
+          description: link to the movie by name
+            responses:
+              200:
+                body:
+                  application/text:
+                    example: |
+                      https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+    /getMovieByGenre:
+      /{genre}:
+        /{page}:
+          get:
+            description: a list of movies matching the genre from a particular page
+              responses:
+                200:
+                  body:
+                    application/json:
+                      example: |
+                        [{
+                          "id": 19995,
+                          "title": "Avatar",
+                          "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                          "original_language": "en",
+                          "release_date": "2009-12-15",
+                          "genres": [{
+                              "id": 28,
+                              "name": "Action"
+                            }],
+                          "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                          "runtime": null,
+                          "status": null,
+                          "vote_average": 7.5
+                        }]
+                406:
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "httpStatus": "NOT_ACCEPTABLE",
+                          "message": "the genre is not available",
+                          "errors": [
+                            "Status Code: 406, Exception: ParameterException"
+                          ]
+                        }
+                403:
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        }
+    /addNotifyMovie:
+      /{name}:
+        put:
+          description: add a reminder to the movie by the name of the movie
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                          "id": "636ea16e9ef5a479c9e11526",
+                          "username": "Dmian12a",
+                          "favoriteGenres": [],
+                          "favoriteMovies": [],
+                          "notificationsMovie": [
+                              {
+                                  "id": 76600,
+                                  "title": "Avatar: The Way of Water",
+                                  "overview": "Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure.",
+                                  "original_language": "en",
+                                  "release_date": "2022-12-14",
+                                  "genres": [{
+                                          "id": 878,
+                                          "name": "Science Fiction"
+                                      }],
+                                  "poster_path": "https://image.tmdb.org/t/p/w500/94xxm5701CzOdJdUEdIuwqZaowx.jpg",
+                                  "runtime": null,
+                                  "status": null,
+                                  "vote_average": 0.0
+                              }
+                          ]
+                      }
+              406:
+                body:
+                  application/json:
+                    example: |
+                      {
+                          "httpStatus": "NOT_ACCEPTABLE",
+                          "message": "A movie that has already had a premiere cannot be added",
+                          "errors": [
+                              "Status Code: 406, Exception: InvalidBusinessArgumentException"
+                          ]
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+    /removeNotifyMovie:
+      /{name}:
+        delete:
+          description: removes a notification by name from the user's notification list
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "TEST",
+                        "favoriteGenres": [],
+                        "favoriteMovies": [],
+                        "notificationsMovie": []
+                      }
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
+    /getUserNotifyMovieList:
+      get:
+        description: give a list of user's Notify movies
+          responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    [{
+                      "id": 19995,
+                      "title": "Avatar",
+                      "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                      "original_language": "en",
+                      "release_date": "2009-12-15",
+                      "genres": [
+                        {
+                          "id": 28,
+                          "name": "Action"
+                        },
+                        {
+                          "id": 12,
+                          "name": "Adventure"
+                        },
+                        {
+                          "id": 14,
+                          "name": "Fantasy"
+                        },
+                        {
+                          "id": 878,
+                          "name": "Science Fiction"
+                        }
+                      ],
+                      "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                      "runtime": null,
+                      "status": null,
+                      "vote_average": 7.5
+                    }]
+            403:
+              body:
+                application/json:
+                  example: |
+                    {
+                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                    }
+    /getUserNotifyMovieByDate:
+      /{timeRange}:
+        get:
+          description: give a list of user's Notify movies, timeRange is the time in which the premiere is to be from today
+            available ranges {int}M/m/W/w/D/d months, weeks, days, respectively
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      [{
+                        "id": 19995,
+                        "title": "Avatar",
+                        "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                        "original_language": "en",
+                        "release_date": "2009-12-15",
+                        "genres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          },
+                          {
+                            "id": 12,
+                            "name": "Adventure"
+                          },
+                          {
+                            "id": 14,
+                            "name": "Fantasy"
+                          },
+                          {
+                            "id": 878,
+                            "name": "Science Fiction"
+                          }
+                        ],
+                        "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                        "runtime": null,
+                        "status": null,
+                        "vote_average": 7.5
+                      }]
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
