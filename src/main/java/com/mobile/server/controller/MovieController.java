@@ -5,12 +5,11 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mobile.server.configuration.MovieApiProperties;
-import com.mobile.server.controller.pojo.MoviesDto;
 import com.mobile.server.controller.dto.UserDto;
 import com.mobile.server.controller.mapper.Mapper;
+import com.mobile.server.controller.pojo.MoviesDto;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
-import com.mobile.server.model.Movie;
 import com.mobile.server.model.User;
 import com.mobile.server.service.MovieService;
 import com.mobile.server.service.UserService;
@@ -108,8 +107,9 @@ public class MovieController {
     }
 
     @GetMapping("/getUserMovieList")
-    public ResponseEntity<Collection<Movie>> getUserMovieList(HttpServletRequest request) {
-        return new ResponseEntity<>(getUserFromHeader(request).getFavoriteMovies(), HttpStatus.OK);
+    public ResponseEntity<List<MoviesDto>> getUserMovieList(HttpServletRequest request) {
+        return new ResponseEntity<>(Mapper.mapMovies(getUserFromHeader(request).getFavoriteMovies().stream().toList(),
+                apiProperties.getImg()), HttpStatus.OK);
     }
 
     @GetMapping("/searchMovie/{page}/{query}")
@@ -135,16 +135,22 @@ public class MovieController {
         return new ResponseEntity<>(Mapper.mapMovies(movieService.getMoviesByGenre(genre, page), apiProperties.getImg()), HttpStatus.OK);
     }
 
-    @PutMapping("/addNotifiMovie/{name}")
+    @PutMapping("/addNotifyMovie/{name}")
     public ResponseEntity<?> addNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.addNotifiMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/removeNotifiMovie/{name}")
+    @PutMapping("/removeNotifyMovie/{name}")
     public ResponseEntity<?> removeNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.removeNotifiMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/getUserNotifyMovieList")
+    public ResponseEntity<List<MoviesDto>> getUserNotifyMovieList(HttpServletRequest request) {
+        return new ResponseEntity<>(Mapper.mapMovies(getUserFromHeader(request).getNotificationsMovie().stream().toList(),
+                apiProperties.getImg()), HttpStatus.OK);
     }
 
     private User getUserFromHeader(HttpServletRequest request) {

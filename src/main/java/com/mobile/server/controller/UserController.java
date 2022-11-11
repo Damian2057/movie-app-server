@@ -41,18 +41,18 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUsers() {
-        return new ResponseEntity<>(Mapper.mapUsers(userService.getUsers(), apiProperties.getImg()), HttpStatus.OK);
+        return new ResponseEntity<>(Mapper.mapUsers(userService.getUsers(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/user")
     public ResponseEntity<UserDto> getUser(HttpServletRequest request) {
-        return new ResponseEntity<>(Mapper.mapUser(getUserFromHeader(request), apiProperties.getImg()), HttpStatus.OK);
+        return new ResponseEntity<>(Mapper.mapUser(getUserFromHeader(request), apiProperties.getImg()), HttpStatus.CONTINUE);
     }
 
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(@RequestBody User user) {
-        return new ResponseEntity<>(Mapper.mapUser(userService.registerUser(user), apiProperties.getImg()), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(Mapper.mapUser(userService.registerUser(user), apiProperties.getImg()), HttpStatus.CREATED);
     }
 
     @GetMapping("/token/refresh")
