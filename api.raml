@@ -1,0 +1,104 @@
+#%RAML 1.0
+title: placeholder
+version: 1.0
+traits:
+  hasHeaders:
+    headers:
+      Authorization:
+        displayName: Authorization
+        description: Basic authentication Bearer Token
+        type: string
+        required: true
+/api:
+  /users:
+    get:
+      is: ["hasHeaders"]
+      description: Retrieve a list of all the users
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [{
+                "id": "6367d30b4e6f4a27427963c8",
+                "username": "testta",
+                "favoriteGenres": [],
+                "favoriteMovies": [],
+                "reminderMovies": []
+                },
+                {
+                  "id": "6367d49d035a82746768a518",
+                  "username": "john",
+                  "favoriteGenres": [],
+                  "favoriteMovies": [],
+                  "reminderMovies": []
+                }]
+
+  /register:
+    post:
+      description: user registration endpoint
+      responses:
+        202:
+          body:
+            application/json:
+              example: |
+                {
+                "username": "john",
+                "emailAddress": "example@example.com",
+                "password": "password123"
+                }
+
+  /login:
+    post:
+      description: login user
+        responses:
+          200:
+            body:
+              application/x-www-form-urlencoded:
+                properties:
+                  username:
+                    description: name on account
+                      type: string
+                      example: John
+                  password:
+                    description: password
+                      type: string
+                      example: John
+
+
+  /token/refresh:
+    get:
+      description: refresh user token
+        responses:
+          200:
+            body:
+              application/headers:
+                example: |
+                  Authorization:
+                    description: name on account
+                      type: string
+                      example: "eyJ...kNIQ"
+
+  /movie:
+    /getGenreList:
+
+    /addGenre/{name}:
+
+    /removeGenre/{name}:
+
+    /addGenreList:
+
+    /getUserGenreList:
+
+    /addMovie/{name}:
+
+    /removeMovie/{name}:
+
+    /addMovieList:
+
+    /getMovieByID/{id}:
+
+    /getMovieByName/{name}:
+
+    /getMovieByGenre/{genre}/{page}:
+

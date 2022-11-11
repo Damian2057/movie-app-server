@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Document
@@ -60,6 +61,10 @@ public class User {
 
     public void removeRemMovie(Movie movie) {
         reminderMovies.remove(movie);
+    }
+
+    public void addGenreList(List<Genre> genres) {
+        favoriteGenres.addAll(genres);
     }
 
     public static final class UserBuilder {

@@ -4,8 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.mobile.server.controller.pojo.GenreForm;
-import com.mobile.server.controller.pojo.RoleToUserForm;
+import com.mobile.server.configuration.MovieApiProperties;
+import com.mobile.server.controller.pojo.MoviesDto;
+import com.mobile.server.controller.dto.UserDto;
+import com.mobile.server.controller.mapper.Mapper;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
 import com.mobile.server.model.User;
@@ -34,6 +36,8 @@ public class MovieController {
     private MovieService movieService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MovieApiProperties apiProperties;
 
     /**
      * @return All available Genres in the system
@@ -47,20 +51,31 @@ public class MovieController {
      * adds genre to a specific user
      * @return affected user
      */
-    @PutMapping("/addGenre")
-    public ResponseEntity<User> addGenre(HttpServletRequest request, @RequestBody GenreForm name) {
-        Optional<User> user = userService.addGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
-        return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
+    @PutMapping("/addGenre/{name}")
+    public ResponseEntity<UserDto> addGenre(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.addGenreToUser(getUserFromHeader(request), movieService.getGenre(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     /**
      * removes genre from specific user
      * @return affected user
      */
-    @PutMapping("/removeGenre")
-    public ResponseEntity<User> removeGenre(HttpServletRequest request, @RequestBody GenreForm name) {
-        Optional<User> user = userService.removeGenreToUser(getUserFromHeader(request), movieService.getGenre(name.getName()));
-        return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
+    @PutMapping("/removeGenre/{name}")
+    public ResponseEntity<UserDto> removeGenre(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.removeGenreFromUser(getUserFromHeader(request), movieService.getGenre(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * adds genre list to a specific user
+     * ["Action", "Documentary"]
+     * @return affected user
+     */
+    @PutMapping("/addGenreList")
+    public ResponseEntity<?> addGenreList(HttpServletRequest request, @RequestBody List<String> genres) {
+        Optional<User> user = userService.addGenreListToUser(getUserFromHeader(request), movieService.getGenreList(genres));
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     /**
@@ -69,41 +84,43 @@ public class MovieController {
      * @return collection of genres
      */
     @GetMapping("/getUserGenreList")
-    public ResponseEntity<Collection<Genre>> getUserGenreList(HttpServletRequest request) throws IOException {
+    public ResponseEntity<Collection<Genre>> getUserGenreList(HttpServletRequest request) {
         return new ResponseEntity<>(getUserFromHeader(request).getFavoriteGenres(), HttpStatus.OK);
     }
 
-    /**
-     * adds genre list to a specific user
-     * @return affected user
-     */
-    @PutMapping("/addGenreList")
-    public ResponseEntity<?> addGenreList() {
-        //TODO:?
-        return ResponseEntity.ok().build();
+    @PutMapping("/addMovie/{name}")
+    public ResponseEntity<?> addMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.addMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        //TODO: not working yet
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/addMovie")
-    public ResponseEntity<?> addMovie() {
-        //TODO:?
-        return ResponseEntity.ok().build();
+    @PutMapping("/removeMovie/{name}")
+    public ResponseEntity<?> removeMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+        Optional<User> user = userService.removeMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/addMovieList")
     public ResponseEntity<?> addMovieList() {
-        //TODO:?
+        //TODO: not working yet
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/getMovie")
-    public ResponseEntity<?> ping() {
-        return ResponseEntity.ok().build();
+    @GetMapping("/getMovieByID/{id}")
+    public ResponseEntity<MoviesDto> getMovieByID(@PathVariable(value = "id") String id) {
+        return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByID(id), apiProperties.getImg()), HttpStatus.OK);
     }
 
-    @PutMapping("/removeMovie")
-    public ResponseEntity<?> removeMovie() {
-        //TODO:?
-        return ResponseEntity.ok().build();
+    @GetMapping("/getMovieByName/{name}")
+    public ResponseEntity<MoviesDto> getMovieByName(@PathVariable(value = "name") String name) {
+        return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByName(name), apiProperties.getImg()), HttpStatus.OK);
+    }
+
+    @GetMapping("/getMovieByGenre/{genre}/{page}")
+    public ResponseEntity<List<MoviesDto>> getMovieByGenre(@PathVariable(value = "genre") String genre,
+                                                     @PathVariable(value = "page") String page) {
+        return new ResponseEntity<>(Mapper.mapMovies(movieService.getMoviesByGenre(genre, page), apiProperties.getImg()), HttpStatus.OK);
     }
 
     private User getUserFromHeader(HttpServletRequest request) {

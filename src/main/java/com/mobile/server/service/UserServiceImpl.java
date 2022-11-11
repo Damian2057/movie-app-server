@@ -2,6 +2,7 @@ package com.mobile.server.service;
 
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
+import com.mobile.server.model.Movie;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.repository.RoleRepository;
@@ -98,8 +99,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<User> removeGenreToUser(User user, Genre genre) {
-        log.info("Removing genre {} to user {}", genre.getName(), user.getUsername());
+    public Optional<User> removeGenreFromUser(User user, Genre genre) {
+        log.info("Removing genre {} from user {}", genre.getName(), user.getUsername());
         Optional<User> savedUser = userRepository.findById(user.getId());
         savedUser.ifPresent(user1 -> {
             user1.removeGenre(genre);
@@ -107,4 +108,38 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         });
         return savedUser;
     }
+
+    @Override
+    public Optional<User> addMovieToUser(User user, Movie movie) {
+        log.info("Adding Movie {} to user {}", movie.getTitle(), user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.addMovie(movie);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
+    @Override
+    public Optional<User> addGenreListToUser(User user, List<Genre> genres) {
+        log.info("Adding genre {} to user {}", genres, user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.addGenreList(genres);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
+    @Override
+    public Optional<User> removeMovieFromUser(User user, Movie movie) {
+        log.info("Removing movie {} from user {}", movie.getTitle(), user.getUsername());
+        Optional<User> savedUser = userRepository.findById(user.getId());
+        savedUser.ifPresent(user1 -> {
+            user1.removeMovie(movie);
+            userRepository.save(user1);
+        });
+        return savedUser;
+    }
+
 }
