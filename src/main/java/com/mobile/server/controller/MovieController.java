@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -136,21 +137,30 @@ public class MovieController {
     }
 
     @PutMapping("/addNotifyMovie/{name}")
-    public ResponseEntity<UserDto> addNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> addNotificationsMovie(HttpServletRequest request,
+                                                         @PathVariable(value = "name") String name) throws ParseException {
+        movieNotifyRefresh(request);
         Optional<User> user = userService.addNotifiMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/removeNotifyMovie/{name}")
-    public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request,
+                                                            @PathVariable(value = "name") String name) throws ParseException {
+        movieNotifyRefresh(request);
         Optional<User> user = userService.removeNotifiMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/getUserNotifyMovieList")
-    public ResponseEntity<List<MoviesDto>> getUserNotifyMovieList(HttpServletRequest request) {
+    public ResponseEntity<List<MoviesDto>> getUserNotifyMovieList(HttpServletRequest request) throws ParseException {
+        movieNotifyRefresh(request);
         return new ResponseEntity<>(Mapper.mapMovies(getUserFromHeader(request).getNotificationsMovie().stream().toList(),
                 apiProperties.getImg()), HttpStatus.OK);
+    }
+
+    private void movieNotifyRefresh(HttpServletRequest request) throws ParseException {
+        userService.refreshNotify(getUserFromHeader(request));
     }
 
     private User getUserFromHeader(HttpServletRequest request) {

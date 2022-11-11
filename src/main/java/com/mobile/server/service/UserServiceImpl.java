@@ -17,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -154,7 +157,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<User> addNotifiMovieToUser(User user, Movie movie) {
+    public Optional<User> addNotifiMovieToUser(User user, Movie movie) throws ParseException {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if(date.after(sdf.parse(movie.getRelease_date()))) {
+            throw new ApiExceptions.InvalidBusinessArgumentException("A movie that has already had a premiere cannot be added");
+        }
         log.info("Adding Movie notification {} to user {}", movie.getTitle(), user.getUsername());
         Optional<User> savedUser = userRepository.findById(user.getId());
         savedUser.ifPresent(user1 -> {
@@ -173,6 +181,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userRepository.save(user1);
         });
         return savedUser;
+    }
+
+    @Override
+    public void refreshNotify(User user) {
+        log.info("Refresh Movie notification for user {}", user.getUsername());
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        user.getNotificationsMovie().removeIf(movie -> {
+            try {
+                return date.after(sdf.parse(movie.getRelease_date()));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        userRepository.save(user);
     }
 
 }

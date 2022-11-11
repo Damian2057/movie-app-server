@@ -5,6 +5,7 @@ import com.mobile.server.model.Movie;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,9 @@ public interface UserService {
 
     Optional<User> addMovieListToUser(User user, List<Movie> movies);
 
-    Optional<User> addNotifiMovieToUser(User user, Movie movie);
+    Optional<User> addNotifiMovieToUser(User user, Movie movie) throws ParseException;
 
     Optional<User> removeNotifiMovieFromUser(User user, Movie movie);
+
+    void refreshNotify(User user) throws ParseException;
 }

@@ -12,6 +12,7 @@ import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Role;
 import com.mobile.server.model.User;
 import com.mobile.server.service.UserService;
+import com.mobile.server.validation.Check;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(@RequestBody User user) {
+        Check.validateUser(user);
         return new ResponseEntity<>(Mapper.mapUser(userService.registerUser(user), apiProperties.getImg()), HttpStatus.CREATED);
     }
 
