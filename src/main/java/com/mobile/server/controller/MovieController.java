@@ -122,6 +122,13 @@ public class MovieController {
                 apiProperties.getImg()), HttpStatus.OK);
     }
 
+    @GetMapping("/getUserPreferredMovieList/{page}")
+    public ResponseEntity<List<MoviesDto>> getUserPreferredMovieList(HttpServletRequest request,
+                                                                     @PathVariable(value = "page") String page) {
+        return new ResponseEntity<>(Mapper.mapMovies(movieService.getMovieByGenreList(getUserFromHeader(request)
+                .getFavoriteGenres().stream().toList(), page), apiProperties.getImg()), HttpStatus.OK);
+    }
+
     @GetMapping("/searchMovie/{page}/{query}")
     public ResponseEntity<Collection<MoviesDto>> searchMovie(@PathVariable(value = "page") String page,
                                                          @PathVariable(value = "query") String query) {

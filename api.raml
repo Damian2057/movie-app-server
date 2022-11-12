@@ -521,6 +521,51 @@ traits:
                     {
                       "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
                     }
+    /getUserPreferredMovieList:
+      /{page}:
+        get:
+          description: return a list of movies that may interest the user based on his preferences
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      [{
+                        "id": 19995,
+                        "title": "Avatar",
+                        "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                        "original_language": "en",
+                        "release_date": "2009-12-15",
+                        "genres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          },
+                          {
+                            "id": 12,
+                            "name": "Adventure"
+                          },
+                          {
+                            "id": 14,
+                            "name": "Fantasy"
+                          },
+                          {
+                            "id": 878,
+                            "name": "Science Fiction"
+                          }
+                        ],
+                        "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                        "runtime": null,
+                        "status": null,
+                        "vote_average": 7.5
+                      }]
+              403:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      }
     /searchMovie:
       /{page}:
         /{query}:
