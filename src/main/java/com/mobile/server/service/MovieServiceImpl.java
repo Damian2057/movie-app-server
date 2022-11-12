@@ -10,7 +10,6 @@ import com.mobile.server.controller.pojo.MovieForm;
 import com.mobile.server.exception.types.ApiExceptions;
 import com.mobile.server.model.Genre;
 import com.mobile.server.model.Movie;
-import com.mobile.server.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,20 +87,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> getMoviesByGenre(String genre, String page) {
-        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
-            apiConnection.setRequestMethod("GET");
-            apiConnection.appendEndPoint("/discover/movie");
-            apiConnection.appendParam("page=" + page);
-            apiConnection.appendParam("with_genres=" + getSingleGenreByName(genre));
-            apiConnection.buildRequest();
-            String response = apiConnection.response();
-
-            Gson gson = new Gson();
-            MovieForm movieForm = gson.fromJson(response, MovieForm.class);
-            return Mapper.mapMoviesForm(movieForm.getResults(), getGenreList());
-        } catch (ApiExceptions.ConnectionException | IOException e) {
-            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
-        }
+        return getMoviesByGenreInternal(genre, page);
     }
 
     @Override
@@ -110,6 +98,16 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> getMovieList(List<String> titles) {
         return titles.stream().map(this::getMovieByName).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Movie> getMovieByGenreList(List<Genre> genres, String page) {
+        Set<Movie> result = new HashSet<>();
+        for (Genre genre : genres) {
+            List<Movie> movieList = getMoviesByGenreInternal(genre.getName(), page);
+            result.addAll(movieList);
+        }
+        return result.stream().toList();
     }
 
     private Genre getSingleGenreById(String name) {
@@ -146,6 +144,23 @@ public class MovieServiceImpl implements MovieService {
             Gson gson = new Gson();
             Genres nameList = gson.fromJson(response, Genres.class);
             return nameList.getGenres();
+        } catch (ApiExceptions.ConnectionException | IOException e) {
+            throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+        }
+    }
+
+    private List<Movie> getMoviesByGenreInternal(String genre, String page) {
+        try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
+            apiConnection.setRequestMethod("GET");
+            apiConnection.appendEndPoint("/discover/movie");
+            apiConnection.appendParam("page=" + page);
+            apiConnection.appendParam("with_genres=" + getSingleGenreByName(genre));
+            apiConnection.buildRequest();
+            String response = apiConnection.response();
+
+            Gson gson = new Gson();
+            MovieForm movieForm = gson.fromJson(response, MovieForm.class);
+            return Mapper.mapMoviesForm(movieForm.getResults(), getGenreList());
         } catch (ApiExceptions.ConnectionException | IOException e) {
             throw new ApiExceptions.ConnectionException("Error connecting to movie api");
         }

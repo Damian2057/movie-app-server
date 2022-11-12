@@ -20,4 +20,5 @@ public interface MovieService {
 
     List<Movie> getMovieList(List<String> titles);
 
+    List<Movie> getMovieByGenreList(List<Genre> genres, String page);
 }
