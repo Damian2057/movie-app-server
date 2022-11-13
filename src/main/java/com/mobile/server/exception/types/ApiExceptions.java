@@ -25,6 +25,12 @@ public class ApiExceptions {
         }
     }
 
+    public static class TokenException extends RuntimeException{
+        public TokenException(String message) {
+            super(message);
+        }
+    }
+
     public static class ConnectionException extends RuntimeException{
         public ConnectionException(String message) {
             super(message);

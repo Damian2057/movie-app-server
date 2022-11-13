@@ -112,6 +112,17 @@ traits:
                   "favoriteMovies": [],
                   "notificationsMovie": []
                 }
+        401:
+          body:
+            application/json:
+              example: |
+                {
+                  "httpStatus": "UNAUTHORIZED",
+                  "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                  "errors": [
+                    "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                  ]
+                }
   /register:
     post:
       description: user registration endpoint
@@ -158,7 +169,7 @@ traits:
         responses:
           200:
             body:
-              application/x-www-form-urlencoded:
+              application/json:
                 properties:
                   username:
                     description: name on account
@@ -170,6 +181,11 @@ traits:
                       type: string
                       required: true
                       example: John
+                example: |
+                  {
+                    "username": "TEST",
+                    "password": "TEST"
+                  }
           403:
             description: Invalid login details
   /token/refresh:
@@ -220,12 +236,16 @@ traits:
                       "id": 12,
                       "name": "Adventure"
                     }]
-            403:
+            401:
               body:
                 application/json:
                   example: |
                     {
-                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      "httpStatus": "UNAUTHORIZED",
+                      "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                      "errors": [
+                        "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                      ]
                     }
     /addGenre:
       /{name}:
@@ -259,12 +279,16 @@ traits:
                           "Status Code: 406, Exception: ParameterException"
                         ]
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /removeGenre:
       /{name}:
@@ -293,12 +317,16 @@ traits:
                           "Status Code: 406, Exception: ParameterException"
                         ]
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /getGenreByID:
       /{id}:
@@ -324,12 +352,16 @@ traits:
                           "Status Code: 406, Exception: ParameterException"
                         ]
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /addGenreList:
       put:
@@ -356,12 +388,16 @@ traits:
                         "Status Code: 406, Exception: ParameterException"
                       ]
                     }
-            403:
+            401:
               body:
                 application/json:
                   example: |
                     {
-                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      "httpStatus": "UNAUTHORIZED",
+                      "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                      "errors": [
+                        "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                      ]
                     }
     /getUserGenreList:
       get:
@@ -379,12 +415,16 @@ traits:
                       "id": 99,
                       "name": "Documentary"
                     }]
-            403:
+            401:
               body:
                 application/json:
                   example: |
                     {
-                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      "httpStatus": "UNAUTHORIZED",
+                      "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                      "errors": [
+                        "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                      ]
                     }
     /addMovie:
       /{name}:
@@ -422,12 +462,16 @@ traits:
                         ],
                         "notificationsMovie": []
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /removeMovie:
       /{name}:
@@ -449,12 +493,16 @@ traits:
                         "favoriteMovies": [],
                         "notificationsMovie": []
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /addMovieList:
       put:
@@ -470,12 +518,16 @@ traits:
                         example: Action
                   example: |
                     ["Avatar", "Green Book"]
-            403:
+            401:
               body:
                 application/json:
                   example: |
                     {
-                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      "httpStatus": "UNAUTHORIZED",
+                      "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                      "errors": [
+                        "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                      ]
                     }
     /getUserMovieList:
       get:
@@ -514,12 +566,16 @@ traits:
                       "status": null,
                       "vote_average": 7.5
                     }]
-            403:
+            401:
               body:
                 application/json:
                   example: |
                     {
-                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      "httpStatus": "UNAUTHORIZED",
+                      "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                      "errors": [
+                        "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                      ]
                     }
     /getUserPreferredMovieList:
       /{page}:
@@ -559,12 +615,16 @@ traits:
                         "status": null,
                         "vote_average": 7.5
                       }]
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /searchMovie:
       /{page}:
@@ -605,12 +665,16 @@ traits:
                           "status": null,
                           "vote_average": 7.5
                         }]
-                403:
+                401:
                   body:
                     application/json:
                       example: |
                         {
-                          "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                          "httpStatus": "UNAUTHORIZED",
+                          "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                          "errors": [
+                            "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                          ]
                         }
     /getMovieByID:
       /{id}:
@@ -636,12 +700,16 @@ traits:
                           "Status Code: 406, Exception: ConnectionException"
                         ]
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /getMovieByName:
       /{name}:
@@ -681,12 +749,16 @@ traits:
                         "status": null,
                         "vote_average": 7.5
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
       /image:
         get:
@@ -697,12 +769,16 @@ traits:
                   application/text:
                     example: |
                       https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /getMovieByGenre:
       /{genre}:
@@ -740,12 +816,16 @@ traits:
                             "Status Code: 406, Exception: ParameterException"
                           ]
                         }
-                403:
+                401:
                   body:
                     application/json:
                       example: |
                         {
-                          "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                          "httpStatus": "UNAUTHORIZED",
+                          "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                          "errors": [
+                            "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                          ]
                         }
     /addNotifyMovie:
       /{name}:
@@ -790,12 +870,16 @@ traits:
                               "Status Code: 406, Exception: InvalidBusinessArgumentException"
                           ]
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /removeNotifyMovie:
       /{name}:
@@ -813,12 +897,16 @@ traits:
                         "favoriteMovies": [],
                         "notificationsMovie": []
                       }
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }
     /getUserNotifyMovieList:
       get:
@@ -857,12 +945,16 @@ traits:
                       "status": null,
                       "vote_average": 7.5
                     }]
-            403:
+            401:
               body:
                 application/json:
                   example: |
                     {
-                      "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                      "httpStatus": "UNAUTHORIZED",
+                      "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                      "errors": [
+                        "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                      ]
                     }
     /getUserNotifyMovieByDate:
       /{timeRange}:
@@ -903,10 +995,14 @@ traits:
                         "status": null,
                         "vote_average": 7.5
                       }]
-              403:
+              401:
                 body:
                   application/json:
                     example: |
                       {
-                        "error_message": "The Token has expired on Fri Nov 11 19:15:19 CET 2022."
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
                       }

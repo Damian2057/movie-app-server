@@ -4,6 +4,7 @@ import com.mobile.server.exception.types.ApiExceptions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,7 +36,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, apiError, headers, HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler({ApiExceptions.InvalidLoginDetails.class, ApiExceptions.ConnectionException.class, ApiExceptions.LogicException.class, ApiExceptions.ParameterException.class, ApiExceptions.InvalidBusinessArgumentException.class})
+    @ExceptionHandler({ApiExceptions.TokenException.class,
+            ApiExceptions.InvalidLoginDetails.class,
+            ApiExceptions.ConnectionException.class,
+            ApiExceptions.LogicException.class,
+            ApiExceptions.ParameterException.class,
+            ApiExceptions.InvalidBusinessArgumentException.class})
     public final ResponseEntity<Object> handleException(
             RuntimeException exception) {
         final String error = "Status Code: " + HttpStatus.NOT_ACCEPTABLE.value() + ", Exception: " + exception.getClass().getSimpleName();
