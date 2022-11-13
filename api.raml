@@ -126,31 +126,41 @@ traits:
   /register:
     post:
       description: user registration endpoint
+      body:
+        application/json:
+          properties:
+            username:
+              description: name on account with a minimum length of 5
+                type: string
+                required: true
+                example: John
+            emailAddress:
+              description: emailAddress which fits in pattern
+                type: string
+                required: true
+                example: John
+            password:
+              description: password with a minimum length of 8
+                type: string
+                required: true
+                example: John
+            example: |
+              {
+              "username": "john",
+              "emailAddress": "example@example.com",
+              "password": "password123"
+              }
       responses:
         202:
           body:
             application/json:
-              properties:
-                username:
-                  description: name on account with a minimum length of 5
-                    type: string
-                    required: true
-                    example: John
-                emailAddress:
-                  description: emailAddress which fits in pattern
-                    type: string
-                    required: true
-                    example: John
-                password:
-                  description: password with a minimum length of 8
-                    type: string
-                    required: true
-                    example: John
               example: |
                 {
-                "username": "john",
-                "emailAddress": "example@example.com",
-                "password": "password123"
+                  "id": "6371544465d07b77db911ae0",
+                  "username": "Dmian12aaa",
+                  "favoriteGenres": [],
+                  "favoriteMovies": [],
+                  "notificationsMovie": []
                 }
         406:
           body:
@@ -166,25 +176,33 @@ traits:
   /login:
     post:
       description: login user
+        body:
+          application/json:
+            properties:
+              username:
+                description: name on account
+                  type: string
+                  required: true
+                  example: John
+              password:
+                description: password
+                  type: string
+                  required: true
+                  example: John
+            example: |
+              {
+                "username": "TEST",
+                "password": "TEST"
+              }
         responses:
           200:
             body:
               application/json:
-                properties:
-                  username:
-                    description: name on account
-                      type: string
-                      required: true
-                      example: John
-                  password:
-                    description: password
-                      type: string
-                      required: true
-                      example: John
                 example: |
                   {
-                    "username": "TEST",
-                    "password": "TEST"
+                    "access_token": "qTljtYReBfjlN5enWguoyUQMzL0tggt7AuwjOb7V_aA",
+                    "refresh_token": "nZRjLrh360uOKmwLw6Ljcjr0DaMYKOhwtdJM7iFXyzM",
+                    "expiration_time": "1668375239483"
                   }
           403:
             description: Invalid login details
