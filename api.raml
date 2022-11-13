@@ -626,6 +626,17 @@ traits:
                           "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
                         ]
                       }
+              406:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "NOT_ACCEPTABLE",
+                        "message": "Error connecting to movie api",
+                        "errors": [
+                          "Status Code: 406, Exception: ConnectionException"
+                        ]
+                      }
     /searchMovie:
       /{page}:
         /{query}:
@@ -760,6 +771,8 @@ traits:
                           "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
                         ]
                       }
+              400:
+                description: no movie found with a similar title
       /image:
         get:
           description: link to the movie by name

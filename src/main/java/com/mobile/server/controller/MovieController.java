@@ -143,7 +143,11 @@ public class MovieController {
 
     @GetMapping("/getMovieByName/{name}")
     public ResponseEntity<MoviesDto> getMovieByName(@PathVariable(value = "name") String name) {
-        return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByName(name), apiProperties.getImg()), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByName(name), apiProperties.getImg()), HttpStatus.OK);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/getMovieByName/{name}/image")
