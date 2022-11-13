@@ -178,6 +178,8 @@ public class MovieServiceImpl implements MovieService {
             return Mapper.mapMovieForm(movieForm.getResults().get(0), getGenreList());
         } catch (ApiExceptions.ConnectionException | IOException e) {
             throw new ApiExceptions.ConnectionException("Error connecting to movie api");
+        } catch (Exception e) {
+            return null;
         }
     }
 
