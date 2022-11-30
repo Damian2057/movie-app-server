@@ -444,7 +444,7 @@ traits:
                         "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
                       ]
                     }
-    /addMovie:
+    /addMovieByName:
       /{name}:
         put:
           description: add a movie by title to user's favorites
@@ -491,8 +491,86 @@ traits:
                           "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
                         ]
                       }
-    /removeMovie:
+    /addMovieById:
+      /{id}:
+        put:
+          description: add a movie by title to user's favorites
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "Dmian12a",
+                        "favoriteGenres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          }],
+                        "favoriteMovies": [
+                          {
+                            "id": 19995,
+                            "title": "Avatar",
+                            "overview": "In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                            "original_language": "en",
+                            "release_date": "2009-12-15",
+                            "genres": [{
+                                "id": 28,
+                                "name": "Action"
+                              },],
+                            "poster_path": "https://image.tmdb.org/t/p/w500/jRXYjXNq0Cs2TcJjLkki24MLp7u.jpg",
+                            "runtime": null,
+                            "status": null,
+                            "vote_average": 7.5
+                          }
+                        ],
+                        "notificationsMovie": []
+                      }
+              401:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
+                      }
+    /removeMovieByName:
       /{name}:
+        delete:
+          description: remove a movie by title from user's favorites
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "Dmian12a",
+                        "favoriteGenres": [
+                          {
+                            "id": 28,
+                            "name": "Action"
+                          }],
+                        "favoriteMovies": [],
+                        "notificationsMovie": []
+                      }
+              401:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
+                      }
+    /removeMovieById:
+      /{id}:
         delete:
           description: remove a movie by title from user's favorites
             responses:
@@ -858,7 +936,7 @@ traits:
                             "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
                           ]
                         }
-    /addNotifyMovie:
+    /addNotifyMovieByName:
       /{name}:
         put:
           description: add a reminder to the movie by the name of the movie
@@ -912,8 +990,89 @@ traits:
                           "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
                         ]
                       }
-    /removeNotifyMovie:
+    /addNotifyMovieById:
+      /{id}:
+        put:
+          description: add a reminder to the movie by the name of the movie
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                          "id": "636ea16e9ef5a479c9e11526",
+                          "username": "Dmian12a",
+                          "favoriteGenres": [],
+                          "favoriteMovies": [],
+                          "notificationsMovie": [
+                              {
+                                  "id": 76600,
+                                  "title": "Avatar: The Way of Water",
+                                  "overview": "Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure.",
+                                  "original_language": "en",
+                                  "release_date": "2022-12-14",
+                                  "genres": [{
+                                          "id": 878,
+                                          "name": "Science Fiction"
+                                      }],
+                                  "poster_path": "https://image.tmdb.org/t/p/w500/94xxm5701CzOdJdUEdIuwqZaowx.jpg",
+                                  "runtime": null,
+                                  "status": null,
+                                  "vote_average": 0.0
+                              }
+                          ]
+                      }
+              406:
+                body:
+                  application/json:
+                    example: |
+                      {
+                          "httpStatus": "NOT_ACCEPTABLE",
+                          "message": "A movie that has already had a premiere cannot be added",
+                          "errors": [
+                              "Status Code: 406, Exception: InvalidBusinessArgumentException"
+                          ]
+                      }
+              401:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
+                      }
+    /removeNotifyMovieByName:
       /{name}:
+        delete:
+          description: removes a notification by name from the user's notification list
+            responses:
+              202:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id": "636ea16e9ef5a479c9e11526",
+                        "username": "TEST",
+                        "favoriteGenres": [],
+                        "favoriteMovies": [],
+                        "notificationsMovie": []
+                      }
+              401:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "httpStatus": "UNAUTHORIZED",
+                        "message": "The Token has expired on Sun Nov 13 11:17:56 CET 2022.",
+                        "errors": [
+                          "Status Code:401, Exception: class com.auth0.jwt.exceptions.TokenExpiredException"
+                        ]
+                      }
+    /removeNotifyMovieById:
+      /{id}:
         delete:
           description: removes a notification by name from the user's notification list
             responses:
