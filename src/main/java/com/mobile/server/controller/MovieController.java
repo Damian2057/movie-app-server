@@ -98,15 +98,27 @@ public class MovieController {
         return new ResponseEntity<>(getUserFromHeader(request).getFavoriteGenres(), HttpStatus.OK);
     }
 
-    @PutMapping("/addMovie/{name}")
-    public ResponseEntity<UserDto> addMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    @PutMapping("/addMovieByName/{name}")
+    public ResponseEntity<UserDto> addMovieByName(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.addMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/removeMovie/{name}")
-    public ResponseEntity<UserDto> removeMovie(HttpServletRequest request, @PathVariable(value = "name") String name) {
+    @PutMapping("/addMovieById/{id}")
+    public ResponseEntity<UserDto> addMovieById(HttpServletRequest request, @PathVariable(value = "id") int id) {
+        Optional<User> user = userService.addMovieToUser(getUserFromHeader(request), movieService.getMovieByID(id));
+        return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/removeMovieByName/{name}")
+    public ResponseEntity<UserDto> removeMovieByName(HttpServletRequest request, @PathVariable(value = "name") String name) {
         Optional<User> user = userService.removeMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/removeMovieById/{id}")
+    public ResponseEntity<UserDto> removeMovieById(HttpServletRequest request, @PathVariable(value = "id") int id) {
+        Optional<User> user = userService.removeMovieFromUser(getUserFromHeader(request), movieService.getMovieByID(id));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
@@ -137,7 +149,7 @@ public class MovieController {
     }
 
     @GetMapping("/getMovieByID/{id}")
-    public ResponseEntity<MoviesDto> getMovieByID(@PathVariable(value = "id") String id) {
+    public ResponseEntity<MoviesDto> getMovieByID(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>(Mapper.mapMovie(movieService.getMovieByID(id), apiProperties.getImg()), HttpStatus.OK);
     }
 
@@ -161,19 +173,35 @@ public class MovieController {
         return new ResponseEntity<>(Mapper.mapMovies(movieService.getMoviesByGenre(genre, page), apiProperties.getImg()), HttpStatus.OK);
     }
 
-    @PutMapping("/addNotifyMovie/{name}")
-    public ResponseEntity<UserDto> addNotificationsMovie(HttpServletRequest request,
+    @PutMapping("/addNotifyMovieByName/{name}")
+    public ResponseEntity<UserDto> addNotificationsMovieByName(HttpServletRequest request,
                                                          @PathVariable(value = "name") String name) throws ParseException {
         movieNotifyRefresh(request);
         Optional<User> user = userService.addNotifiMovieToUser(getUserFromHeader(request), movieService.getMovieByName(name));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/removeNotifyMovie/{name}")
-    public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request,
+    @PutMapping("/addNotifyMovieById/{id}")
+    public ResponseEntity<UserDto> addNotificationsMovieById(HttpServletRequest request,
+                                                         @PathVariable(value = "id") int id) throws ParseException {
+        movieNotifyRefresh(request);
+        Optional<User> user = userService.addNotifiMovieToUser(getUserFromHeader(request), movieService.getMovieByID(id));
+        return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/removeNotifyMovieByName/{name}")
+    public ResponseEntity<UserDto> removeNotificationsMovieByName(HttpServletRequest request,
                                                             @PathVariable(value = "name") String name) throws ParseException {
         movieNotifyRefresh(request);
         Optional<User> user = userService.removeNotifiMovieFromUser(getUserFromHeader(request), movieService.getMovieByName(name));
+        return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/removeNotifyMovieById/{id}")
+    public ResponseEntity<UserDto> removeNotificationsMovie(HttpServletRequest request,
+                                                            @PathVariable(value = "id") int id) throws ParseException {
+        movieNotifyRefresh(request);
+        Optional<User> user = userService.removeNotifiMovieFromUser(getUserFromHeader(request), movieService.getMovieByID(id));
         return new ResponseEntity<>(Mapper.mapUser(user.get(), apiProperties.getImg()), HttpStatus.ACCEPTED);
     }
 

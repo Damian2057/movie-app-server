@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MovieService {
     List<Movie> getMovieSearch(String query, String page);
-    Movie getMovieByID(String id);
+    Movie getMovieByID(int id);
     Genre getGenre(int id);
     Genre getGenre(String name);
     List<Genre> getGenres() throws IOException;

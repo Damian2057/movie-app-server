@@ -51,7 +51,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie getMovieByID(String id) {
+    public Movie getMovieByID(int id) {
         try(MovieApiConnection apiConnection = factory.build(apiProperties.getUrl(), apiProperties.getKey())) {
             apiConnection.setRequestMethod("GET");
             apiConnection.appendEndPoint("/movie/" + id);
