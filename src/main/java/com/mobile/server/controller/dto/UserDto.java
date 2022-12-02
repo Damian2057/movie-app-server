@@ -16,6 +16,7 @@ import java.util.Collection;
 public class UserDto {
     private String id;
     private String username;
+    private String email;
     private Collection<Genre> favoriteGenres;
     private Collection<MoviesDto> favoriteMovies;
     private Collection<MoviesDto> notificationsMovie;

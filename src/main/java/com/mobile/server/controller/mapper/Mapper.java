@@ -18,6 +18,7 @@ public class Mapper {
         return users.stream().map(user ->
                 new UserDto(user.getId(),
                         user.getUsername(),
+                        user.getEmailAddress(),
                         user.getFavoriteGenres(),
                         mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
                         mapMovies(user.getNotificationsMovie().stream().toList(), imgUrl)))
@@ -27,6 +28,7 @@ public class Mapper {
     public static UserDto mapUser(User user, String imgUrl) {
         return new UserDto(user.getId(),
                 user.getUsername(),
+                user.getEmailAddress(),
                 user.getFavoriteGenres(),
                 mapMovies(user.getFavoriteMovies().stream().toList(), imgUrl),
                 mapMovies(user.getNotificationsMovie().stream().toList(), imgUrl));
