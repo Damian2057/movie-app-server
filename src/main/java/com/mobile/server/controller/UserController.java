@@ -78,7 +78,11 @@ public class UserController {
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>();
+                Date date = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTime(date);
                 tokens.put("access_token", access_token);
+                tokens.put("expiration_time", String.valueOf(calendar.getTimeInMillis()));
                 tokens.put("refresh_token", refresh_token);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
